@@ -46,7 +46,7 @@ class SeedScene extends Scene {
         let faceOne = sphere.geometry.faces[30]
         let faceTwo = sphere.geometry.faces[20]
 
-        // TODO: enumerate all faces, get the average position on the face, translate model to average pos, rotate to face normal
+	// TODO: do raycasting to figure out which face to select with mouse cursor
 
         let faceOneCentroid = getFaceCentroid(sphere.geometry, faceOne)
         let faceTwoCentroid = getFaceCentroid(sphere.geometry, faceTwo)
