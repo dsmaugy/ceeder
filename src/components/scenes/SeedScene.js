@@ -16,7 +16,7 @@ function getFaceCentroid(geometry, face) {
 const origin = new Vector3( 0, 0, 0 );
 const length = 1;
 const hex = 0xffff00;
-const UP_VECTOR = new Vector3(0, 1, 0)
+const UP_VECTOR = new Vector3(0, 1, 0);
 
 class SeedScene extends Scene {
     constructor() {
@@ -39,38 +39,47 @@ class SeedScene extends Scene {
 
         const geometry = new SphereGeometry(SPHERE_RADIUS);
         const material = new MeshToonMaterial( { color: 0x00ff00 } );
-        material.wireframe = true
-        const sphere = new Mesh( geometry, material );
+        material.wireframe = false;
+        this.sphere = new Mesh(geometry, material);
 
-        console.log(sphere)
-        let faceOne = sphere.geometry.faces[30]
-        let faceTwo = sphere.geometry.faces[20]
+        console.log(this.sphere);
+        const faceOne = this.sphere.geometry.faces[30];
+        const faceTwo = this.sphere.geometry.faces[20];
 
-        // TODO: enumerate all faces, get the average position on the face, translate model to average pos, rotate to face normal
+        const faceOneCentroid = getFaceCentroid(this.sphere.geometry, faceOne);
+        const faceTwoCentroid = getFaceCentroid(this.sphere.geometry, faceTwo);
 
-        let faceOneCentroid = getFaceCentroid(sphere.geometry, faceOne)
-        let faceTwoCentroid = getFaceCentroid(sphere.geometry, faceTwo)
+        const flowerTest = new Flower(this.sphere);
+        const flowerTwo = flowerTest.clone();
 
-        const flowerTest = new Flower(sphere);
-        let flowerTwo = flowerTest.clone()
-
-        flowerTest.position.copy(faceOneCentroid)
+        flowerTest.position.copy(faceOneCentroid);
 
         // taken from https://stackoverflow.com/questions/9038465/three-js-object3d-cylinder-rotation-to-align-to-a-vector
-        flowerTest.quaternion.setFromUnitVectors(UP_VECTOR, faceOne.normal)
-        console.log(faceOne)
+        flowerTest.quaternion.setFromUnitVectors(UP_VECTOR, faceOne.normal);
+        console.log(faceOne);
 
-        flowerTwo.position.copy(faceTwoCentroid)
-        flowerTwo.quaternion.setFromUnitVectors(UP_VECTOR, faceTwo.normal)
+        flowerTwo.position.copy(faceTwoCentroid);
+        flowerTwo.quaternion.setFromUnitVectors(UP_VECTOR, faceTwo.normal);
 
         // X is red, Y is green, Z is blue
-        sphere.add(flowerTest, flowerTwo, new ArrowHelper( faceOne.normal, origin, length, hex ), new ArrowHelper( faceTwo.normal, origin, length, hex ), new AxesHelper(5))
+        this.sphere.add(flowerTest, flowerTwo, new ArrowHelper( faceOne.normal, origin, length, hex ), new ArrowHelper( faceTwo.normal, origin, length, hex ), new AxesHelper(5))
 
         const lights = new BasicLights();
-        this.add(lights, sphere);
+        this.add(lights, this.sphere);
 
         // Populate GUI
         this.state.gui.add(this.state, 'rotationSpeed', -5, 5);
+    }
+
+    plantFlower(pos, face) {
+        const flower = new Flower(this.sphere);
+        flower.position.copy(pos);
+        flower.quaternion.setFromUnitVectors(UP_VECTOR, face.normal);
+        this.sphere.add(flower);
+    }
+
+    getSphere() {
+        return this.sphere;
     }
 
     addToUpdateList(object) {
