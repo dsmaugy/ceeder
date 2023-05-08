@@ -53,3 +53,8 @@ const windowResizeHandler = () => {
 };
 windowResizeHandler();
 window.addEventListener('resize', windowResizeHandler, false);
+
+window.onload = (event) => {
+  var audio = new Audio('music.mp3');
+  audio.play();
+};
