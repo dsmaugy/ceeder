@@ -1,5 +1,5 @@
 import * as Dat from 'dat.gui';
-import { Scene, Color, ArrowHelper, Vector3, AxesHelper } from 'three';
+import { Scene, Color, ArrowHelper, Vector3, AxesHelper, TextureLoader, RepeatWrapping, ClampToEdgeWrapping, MirroredRepeatWrapping, CubeTextureLoader, Fog } from 'three';
 import { Flower, Land } from 'objects';
 import { BasicLights } from 'lights';
 import { SphereGeometry, MeshToonMaterial, Mesh, Euler } from 'three';
@@ -31,14 +31,24 @@ class SeedScene extends Scene {
         };
 
         // Set background to a nice color
-        this.background = new Color(0x7ec0ee);
+        const cubeLoader = new CubeTextureLoader()
+        cubeLoader.setPath("src/components/textures/")
+
+        // const spaceTexture = new TextureLoader().load("src/components/textures/space3.jpg");
+        const spaceTexture = cubeLoader.load(["space_cube_1.png", "space_cube_2.png", "space_cube_3.png", "space_cube_4.png", "space_cube_5.png", "space_cube_6.png"])
+        spaceTexture.wrapS = MirroredRepeatWrapping;
+        spaceTexture.wrapT = RepeatWrapping;
+        spaceTexture.repeat.set( 2, 2 );
+        this.background = spaceTexture;
+        this.backgroundBlurriness = 0.5;
+        this.fog = new Fog( 0xcccccc, 10, 15 );
 
         // Add meshes to scene
         // const land = new Land();
         // const flower = new Flower(this);
 
         const geometry = new SphereGeometry(SPHERE_RADIUS);
-        const material = new MeshToonMaterial( { color: 0x00ff00 } );
+        const material = new MeshToonMaterial( { color: 0x00ff00} );
         material.wireframe = false;
         this.sphere = new Mesh(geometry, material);
 
