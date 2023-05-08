@@ -125,9 +125,10 @@ const onClickHandler = (event) => {
     
     const intersects = raycaster.intersectObjects(uiScene.children, true);
     // console.log(uiScene.children);
-    console.log(intersects);
+    // console.log(intersects);
     if (intersects.length > 0) {
         const clickedObject = intersects[0].object;
+        // console.log(clickedObject.getObjectByName);
         console.log(clickedObject.name);
 
     }

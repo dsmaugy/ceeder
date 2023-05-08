@@ -29,7 +29,7 @@ class UIScene extends Scene {
 
         const planetSelect = new RoundedButton(camX*.3, camY*.75, 1, 0xc072d4, "planetSelect");
         planetSelect.SetPosition(camX - planetSelect.width/2, -camY/2, 0);
-        this.add( planetSelect);
+        this.add( planetSelect );
 
         // const day
         
