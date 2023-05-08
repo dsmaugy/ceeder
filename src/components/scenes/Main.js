@@ -33,7 +33,7 @@ class MainScene extends Scene {
         this.add(backgroundMesh);
 
         // Add meshes to scene
-        this.planet = new Planet();
+        this.planet = new Planet("Planet1");
 
         // old basic sphere planet
         // const geometry = new SphereGeometry(SPHERE_RADIUS);

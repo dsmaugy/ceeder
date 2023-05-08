@@ -1,25 +1,36 @@
 import { Group } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import MODEL from './Planet1.gltf';
+import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 
 class Planet extends Group {
-    constructor() {
+    constructor(objName) {
         // Call parent Group() constructor
         super();
+        
+        this.objLoader = new OBJLoader();
+        this.mtlLoader = new MTLLoader();
 
-        const loader = new GLTFLoader();
-        this.name = 'planet';
+        this.mtlLoader.setPath("src/components/SpacePack/OBJ/");
+        this.objLoader.setPath("src/components/SpacePack/OBJ/");
+        this.name = 'planet_group';
         this.model = null;
 
-        loader.load(MODEL, (gltf) => {
-            this.add(gltf.scene);
-            this.model = gltf.scene.children[0]; // TODO: this is specific to the imported GLTF
-            console.log(this.model)
-
-            // TODO: probably want to make the planet a big bigger
-            // this.model.scale.multiplyScalar(2)
+        this.mtlLoader.load(objName + ".mtl", (mtl) => {
+            this.objLoader.setMaterials(mtl);
+            this.loadPlanet(objName + ".obj");
         });
 
+    }
+
+    loadPlanet(name) {
+        this.objLoader.load(name, (obj) => {
+            this.add(obj);
+            obj.name = "internal_planet_group";
+            console.log(obj);
+            this.model = obj.children[0];
+            this.model.scale.multiplyScalar(2);
+        }); 
     }
 }
 
