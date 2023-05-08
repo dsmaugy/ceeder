@@ -62,6 +62,7 @@ controls.minDistance = 4;
 controls.maxDistance = 16;
 controls.update();
 
+
 // Render loop
 const onAnimationFrameHandler = (timeStamp) => {
     controls.update();
