@@ -1,5 +1,5 @@
 import * as Dat from 'dat.gui';
-import { Scene, Color, ArrowHelper, Vector3, AxesHelper, TextureLoader, RepeatWrapping, ClampToEdgeWrapping, MirroredRepeatWrapping, CubeTextureLoader, Fog, MeshBasicMaterial } from 'three';
+import { Scene, Color, ArrowHelper, Vector3, AxesHelper, TextureLoader, RepeatWrapping, ClampToEdgeWrapping, MirroredRepeatWrapping, CubeTextureLoader, Fog, MeshBasicMaterial, FogExp2 } from 'three';
 import { Flower, Land } from 'objects';
 import { BasicLights } from 'lights';
 import { SphereGeometry, MeshToonMaterial, Mesh, Euler } from 'three';
@@ -15,9 +15,6 @@ function getFaceCentroid(geometry, face) {
             .divideScalar(3);
 }
 
-const ORIGIN_VECTOR = new Vector3(0, 0, 0);
-const length = 1;
-const hex = 0xffff00;
 const UP_VECTOR = new Vector3(0, 1, 0);
 
 class MainScene extends Scene {
@@ -26,6 +23,8 @@ class MainScene extends Scene {
         super();
 
         // set the space-sphere bounding box
+        this.fog = new Fog(0xcccccc, 0, 350);
+
         const spaceTexture = new TextureLoader().load("src/components/textures/nebula.png");
         const backgroundSphere = new SphereGeometry(200, 40, 20);
         backgroundSphere.scale(-1, 1, 1);
@@ -48,9 +47,9 @@ class MainScene extends Scene {
         this.add(lights, this.planet);
 
         // ASTEROID TESTING
-        const asteroid = new Asteroid("Asteroid1");
-        this.add(asteroid);
-        asteroid.translateX(5);
+        this.asteroid = new Asteroid("Asteroid1");
+        this.add(this.asteroid);
+        // this.asteroid.translateX(100);
 
     }
 

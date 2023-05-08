@@ -84,6 +84,7 @@ function addFlower() {
 // Render loop
 const onAnimationFrameHandler = (timeStamp) => {
     controls.update();
+    scene.asteroid.translateZ(1);
     renderer.render(scene, camera);
     scene.update && scene.update(timeStamp);
     window.requestAnimationFrame(onAnimationFrameHandler);

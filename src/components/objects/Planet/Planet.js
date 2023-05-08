@@ -15,6 +15,9 @@ class Planet extends Group {
             this.add(gltf.scene);
             this.model = gltf.scene.children[0]; // TODO: this is specific to the imported GLTF
             console.log(this.model)
+
+            // TODO: probably want to make the planet a big bigger
+            // this.model.scale.multiplyScalar(2)
         });
 
     }
