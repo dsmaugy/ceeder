@@ -1,5 +1,5 @@
 import * as Dat from 'dat.gui';
-import { Scene, Color, ArrowHelper, Vector3, AxesHelper, TextureLoader, RepeatWrapping, ClampToEdgeWrapping, MirroredRepeatWrapping, CubeTextureLoader, Fog } from 'three';
+import { Scene, Color, ArrowHelper, Vector3, AxesHelper, TextureLoader, RepeatWrapping, ClampToEdgeWrapping, MirroredRepeatWrapping, CubeTextureLoader, Fog, MeshBasicMaterial } from 'three';
 import { Flower, Land } from 'objects';
 import { BasicLights } from 'lights';
 import { SphereGeometry, MeshToonMaterial, Mesh, Euler } from 'three';
@@ -30,18 +30,13 @@ class SeedScene extends Scene {
             updateList: [],
         };
 
-        // Set background to a nice color
-        const cubeLoader = new CubeTextureLoader()
-        cubeLoader.setPath("src/components/textures/")
+        const spaceTexture = new TextureLoader().load("src/components/textures/nebula.png");
 
-        // const spaceTexture = new TextureLoader().load("src/components/textures/space3.jpg");
-        const spaceTexture = cubeLoader.load(["space_cube_1.png", "space_cube_2.png", "space_cube_3.png", "space_cube_4.png", "space_cube_5.png", "space_cube_6.png"])
-        spaceTexture.wrapS = MirroredRepeatWrapping;
-        spaceTexture.wrapT = RepeatWrapping;
-        spaceTexture.repeat.set( 2, 2 );
-        this.background = spaceTexture;
-        this.backgroundBlurriness = 0.5;
-        this.fog = new Fog( 0xcccccc, 10, 15 );
+        const backgroundSphere = new SphereGeometry(200, 40, 20);
+        backgroundSphere.scale(-1, 1, 1);
+        const backgroundMat = new MeshBasicMaterial({map: spaceTexture});
+        const backgroundMesh = new Mesh(backgroundSphere, backgroundMat);
+        this.add(backgroundMesh);
 
         // Add meshes to scene
         // const land = new Land();

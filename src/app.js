@@ -9,6 +9,7 @@
 import { WebGLRenderer, PerspectiveCamera, Vector3, Raycaster, Vector2 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { SeedScene } from 'scenes';
+import AudioManager from './components/audio/AudioManager';
 
 // Initialize core ThreeJS components
 const scene = new SeedScene();
@@ -34,6 +35,10 @@ controls.enablePan = false;
 controls.minDistance = 4;
 controls.maxDistance = 16;
 controls.update();
+
+// set up audio
+const audioManager = new AudioManager();
+camera.add(audioManager);
 
 
 // raycaster example from https://threejs.org/docs/#api/en/core/Raycaster
