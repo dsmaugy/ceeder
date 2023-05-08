@@ -6,18 +6,45 @@
  * handles window resizes.
  *
  */
-import { WebGLRenderer, PerspectiveCamera, Vector3 } from 'three';
+import { WebGLRenderer, PerspectiveCamera, Vector3, OrthographicCamera, Raycaster } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { SeedScene } from 'scenes';
+import { SeedScene, UIScene } from 'scenes';
 
+const { innerHeight, innerWidth } = window;
 // Initialize core ThreeJS components
-const scene = new SeedScene();
-const camera = new PerspectiveCamera();
-const renderer = new WebGLRenderer({ antialias: true });
+const renderer = new WebGLRenderer({ antialias: true,});
+renderer.autoClear = false;
 
+// Perspective 
+const camera = new PerspectiveCamera();
 // Set up camera
 camera.position.set(6, 3, -10);
 camera.lookAt(new Vector3(0, 0, 0));
+
+//Orthographic
+const orthographicSize = 15;
+const aspect = innerWidth / innerHeight;
+const uiCamera = new OrthographicCamera(
+    -orthographicSize * aspect / 2,
+    orthographicSize * aspect / 2,
+    orthographicSize / 2,
+    -orthographicSize / 2
+    );
+    
+// UI camera setup
+uiCamera.position.set(0, 0, orthographicSize);
+uiCamera.lookAt(new Vector3(0, 0, 0));
+uiCamera.aspect = aspect;
+
+// Scene setup
+const uiScene = new UIScene(uiCamera.right, uiCamera.top);
+const scene = new SeedScene();
+
+// var RoundedBoxGeometry = require('three-rounded-box')(THREE); //pass your instance of three
+// var myBox = new THREE.Mesh( new RoundedBoxGeometry( 10 , 10 , 10 , 2 , 5 ) );
+// scene.add(myBox);
+ 
+ 
 
 // Set up renderer, canvas, and minor CSS adjustments
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -39,6 +66,7 @@ controls.update();
 const onAnimationFrameHandler = (timeStamp) => {
     controls.update();
     renderer.render(scene, camera);
+    renderer.render(uiScene, uiCamera);
     scene.update && scene.update(timeStamp);
     window.requestAnimationFrame(onAnimationFrameHandler);
 };
@@ -47,9 +75,61 @@ window.requestAnimationFrame(onAnimationFrameHandler);
 // Resize Handler
 const windowResizeHandler = () => {
     const { innerHeight, innerWidth } = window;
+    const aspect = innerWidth / innerHeight;
     renderer.setSize(innerWidth, innerHeight);
-    camera.aspect = innerWidth / innerHeight;
+
+    // Update Perspective Camera
+    camera.aspect = aspect;
     camera.updateProjectionMatrix();
+
+    // Update orthographic camera's dimensions based on aspect ratio
+    uiCamera.left = -orthographicSize * aspect / 2;
+    uiCamera.right = orthographicSize * aspect / 2;
+    uiCamera.top = orthographicSize / 2;
+    uiCamera.bottom = -orthographicSize / 2;
+
+    uiCamera.aspect = innerWidth / innerHeight;
+    uiCamera.updateProjectionMatrix();
+
+    // uiScene.update && uiScene.update(window);
 };
 windowResizeHandler();
 window.addEventListener('resize', windowResizeHandler, false);
+
+// Click Handler
+const onClickHandler = (event) => {
+    // Mouse Coordinates
+
+    const mouseX = event.clientX;
+    const mouseY = event.clientY;
+
+    // Screen -> NDC [this is within (-1,1)]
+    const mouseNDC = new Vector3(
+        (mouseX / window.innerWidth) * 2 - 1,
+        -(mouseY / window.innerHeight) * 2 +1,
+        0
+    );
+
+    
+    // Unproject: NDC -> world
+    const worldCoords = new Vector3();
+    worldCoords.copy(mouseNDC).unproject(uiCamera);
+    console.log(worldCoords);
+    // Raycast
+    const raycaster = new Raycaster();
+    raycaster.layers.enableAll()
+    raycaster.setFromCamera(mouseNDC, uiCamera);
+    
+    // console.log("clicked on screen coords: (" + mouseX + ", " + mouseY + ")" );
+    // console.log("clicked on world coords: (" + worldCoords.x + ", " + worldCoords.y + ", " + worldCoords.z + ")" );
+    
+    const intersects = raycaster.intersectObjects(uiScene.children, true);
+    // console.log(uiScene.children);
+    console.log(intersects);
+    if (intersects.length > 0) {
+        const clickedObject = intersects[0].object;
+        console.log(clickedObject.name);
+
+    }
+}
+window.addEventListener('click', onClickHandler);
