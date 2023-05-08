@@ -2,18 +2,22 @@ import { Group } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import MODEL from './Planet1.gltf';
 
-class Land extends Group {
+class Planet extends Group {
     constructor() {
         // Call parent Group() constructor
         super();
 
         const loader = new GLTFLoader();
-        this.name = 'land';
+        this.name = 'planet';
+        this.model = null;
 
         loader.load(MODEL, (gltf) => {
             this.add(gltf.scene);
+            this.model = gltf.scene.children[0]; // TODO: this is specific to the imported GLTF
+            console.log(this.model)
         });
+
     }
 }
 
-export default Land;
+export default Planet;

@@ -6,13 +6,13 @@
  * handles window resizes.
  *
  */
-import { WebGLRenderer, PerspectiveCamera, Vector3, Raycaster, Vector2 } from 'three';
+import { WebGLRenderer, PerspectiveCamera, Vector3, Raycaster, Vector2, Mesh, ArrowHelper } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { SeedScene } from 'scenes';
+import { MainScene } from 'scenes';
 import AudioManager from './components/audio/AudioManager';
 
 // Initialize core ThreeJS components
-const scene = new SeedScene();
+const scene = new MainScene();
 const camera = new PerspectiveCamera();
 const renderer = new WebGLRenderer({ antialias: true });
 
@@ -53,13 +53,32 @@ function updatePointer(event) {
     pointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
 }
 
+// function isPlanet(obj) {
+//     let objIter = obj;
+//     while (objIter) {
+//         if (objIter.name === "planet") {
+//             return true;
+//         }
+
+//         objIter = objIter.parent;
+//     }
+
+//     return false;
+// }
+
 function addFlower() {
     raycaster.setFromCamera(pointer, camera);
 
-    const intersects = raycaster.intersectObject(scene.getSphere());
-    if (intersects.length === 1) {
-        scene.plantFlower(intersects[0].point, intersects[0].face);
+    const intersects = raycaster.intersectObject(scene.getPlanet().model);
+    console.log(intersects)
+    for (let i = 0; i < intersects.length; i++) {
+        if (intersects[i].object instanceof Mesh && intersects[i].object.name === "Icosphere") { // TODO: hardcoded to model of planet name
+            scene.plantFlower(intersects[i].point, intersects[i].face);
+            // scene.add(new ArrowHelper(intersects[i].face.normal, intersects[i].point, 2, "red"));
+            break;
+        }
     }
+
 }
 
 // Render loop
