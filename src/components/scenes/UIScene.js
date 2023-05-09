@@ -22,22 +22,22 @@ class UIScene extends Scene {
         currFlower.SetPosition(-camX + currFlower.width/2, -camY + currFlower.length/2, 0);
         this.add( currFlower );
 
-        const flowerSelect = new RoundedButton(camX, camY/2, 1, 0xc072d4, "flowerSelect");
+        const flowerSelect = new RoundedButton(camX, camY/3, 1, 0xc072d4, "flowerSelect");
         flowerSelect.SetPosition(-1, -camY + flowerSelect.length/2, 0);
-        this.add( flowerSelect);
+        this.add( flowerSelect );
 
         // const flowerOne = new RoundedButton(camX/5, camY/4, 1, 0xff0000, "flowerOne");
-        const flowerOne = new RoundedButton(camX/5, camX/5, 1, 0xff0000, "flowerOne");
+        const flowerOne = new RoundedButton(flowerSelect.length*.75, flowerSelect.length*.75, 1, 0xff0000, "flowerOne");
         flowerOne.SetPosition(-1 - flowerSelect.width/4, -camY + flowerSelect.length/2, 1);
         this.add( flowerOne );
 
         // const flowerTwo = new RoundedButton(camX/5, camY/4, 1, 0x00ff00, "flowerTwo");
-        const flowerTwo = new RoundedButton(camX/5, camX/5, 1, 0x00ff00, "flowerTwo");
+        const flowerTwo = new RoundedButton(flowerSelect.length*.75, flowerSelect.length*.75, 1, 0x00ff00, "flowerTwo");
         flowerTwo.SetPosition(-1 , -camY + flowerSelect.length/2, 1);
         this.add( flowerTwo );
         
         // const flowerThree = new RoundedButton(camX/5, camY/4, 1, 0x0000ff, "flowerThree");
-        const flowerThree = new RoundedButton(camX/5, camX/5, 1, 0x0000ff, "flowerThree");
+        const flowerThree = new RoundedButton(flowerSelect.length*.75, flowerSelect.length*.75, 1, 0x0000ff, "flowerThree");
         flowerThree.SetPosition(-1 + flowerSelect.width/4, -camY + flowerSelect.length/2, 1);
         this.add( flowerThree );
 

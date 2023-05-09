@@ -40,12 +40,6 @@ uiCamera.aspect = aspect;
 const uiScene = new UIScene(uiCamera.right, uiCamera.top);
 const scene = new SeedScene();
 
-// var RoundedBoxGeometry = require('three-rounded-box')(THREE); //pass your instance of three
-// var myBox = new THREE.Mesh( new RoundedBoxGeometry( 10 , 10 , 10 , 2 , 5 ) );
-// scene.add(myBox);
- 
- 
-
 // Set up renderer, canvas, and minor CSS adjustments
 renderer.setPixelRatio(window.devicePixelRatio);
 const canvas = renderer.domElement;
@@ -120,9 +114,6 @@ const windowResizeHandler = () => {
 };
 windowResizeHandler();
 window.addEventListener('resize', windowResizeHandler, false);
-
-window.addEventListener('pointermove', updatePointer);
-window.addEventListener('mouseup', addFlower);
 
 window.addEventListener('pointermove', updatePointer);
 window.addEventListener('mouseup', addFlower);
