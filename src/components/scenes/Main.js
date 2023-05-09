@@ -74,7 +74,10 @@ class MainScene extends Scene {
 
     plantBush(pos, face) {
         const bush = new Bush(this.planet);
-        bush.grow(new THREE.Vector3(), { ry: 0, rz: 0 }, 4);
+        bush.init();
+        bush.animatedGrow();
+        bush.animatedGrow();
+        bush.animatedGrow();
         bush.position.copy(pos);
         bush.quaternion.setFromUnitVectors(UP_VECTOR, face.normal);
         this.planet.add(bush);

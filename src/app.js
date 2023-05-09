@@ -105,7 +105,6 @@ function addBush() {
     raycaster.setFromCamera(pointer, camera);
 
     const intersects = raycaster.intersectObject(scene.getPlanet().model);
-    console.log(intersects);
     if (intersects.length === 1) {
         scene.plantBush(intersects[0].point, intersects[0].face);
     }
