@@ -3,7 +3,7 @@ import { getRandomNumber } from "../../util";
 import Asteroid from "../objects/Asteroid/Asteroid";
 
 const SPAWN_RATE = 0.4;
-const DESPAWN_BOUNDARY = 300;
+const DESPAWN_BOUNDARY = 200;
 
 class AsteroidManager extends Group {
     constructor(minRadius, maxRadius) {
@@ -69,6 +69,7 @@ class AsteroidManager extends Group {
         // animate already spawned asteroids
         let removals = []
         this.asteroids.forEach((asteroid, i) => {
+            // WARN: do NOT make this a quaternion... worst mistake of my life!!!!
             asteroid.rotation.x += getRandomNumber(0.1, 0.2);
             // asteroid.rotation.y += getRandomNumber(0.2, 1);
             // asteroid.rotation.z += getRandomNumber(0.1, 0.3);
@@ -88,6 +89,8 @@ class AsteroidManager extends Group {
             console.log("deleting " + idx);
             this.remove(this.asteroids[idx]);
             this.asteroids.splice(idx, 1);
+
+            console.log(this.asteroids);
         })
 
     
