@@ -6,7 +6,7 @@
  * handles window resizes.
  *
  */
-import { WebGLRenderer, PerspectiveCamera, Vector3, OrthographicCamera, Raycaster } from 'three';
+import { WebGLRenderer, PerspectiveCamera, Vector3, OrthographicCamera, Raycaster, Vector2 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { SeedScene, UIScene } from 'scenes';
 
@@ -63,6 +63,28 @@ controls.maxDistance = 16;
 controls.update();
 
 
+
+// raycaster example from https://threejs.org/docs/#api/en/core/Raycaster
+const raycaster = new Raycaster();
+const pointer = new Vector2();
+
+function updatePointer(event) {
+    // calculate pointer position in normalized device coordinates
+    // (-1 to +1) for both components
+
+    pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+    pointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
+}
+
+function addFlower() {
+    raycaster.setFromCamera(pointer, camera);
+
+    const intersects = raycaster.intersectObject(scene.getSphere());
+    if (intersects.length === 1) {
+        scene.plantFlower(intersects[0].point, intersects[0].face);
+    }
+}
+
 // Render loop
 const onAnimationFrameHandler = (timeStamp) => {
     controls.update();
@@ -72,6 +94,8 @@ const onAnimationFrameHandler = (timeStamp) => {
     window.requestAnimationFrame(onAnimationFrameHandler);
 };
 window.requestAnimationFrame(onAnimationFrameHandler);
+
+
 
 // Resize Handler
 const windowResizeHandler = () => {
@@ -96,6 +120,12 @@ const windowResizeHandler = () => {
 };
 windowResizeHandler();
 window.addEventListener('resize', windowResizeHandler, false);
+
+window.addEventListener('pointermove', updatePointer);
+window.addEventListener('mouseup', addFlower);
+
+window.addEventListener('pointermove', updatePointer);
+window.addEventListener('mouseup', addFlower);
 
 // Click Handler
 const onClickHandler = (event) => {
