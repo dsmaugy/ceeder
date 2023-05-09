@@ -5,16 +5,9 @@ import { BasicLights } from 'lights';
 import { SphereGeometry, MeshToonMaterial, Mesh, Euler } from 'three';
 import Planet from '../objects/Planet/Planet';
 import Asteroid from '../objects/Asteroid/Asteroid';
+import AsteroidManager from './AsteroidManager';
 
-const SPHERE_RADIUS = 3;
-
-function getFaceCentroid(geometry, face) {
-    return geometry.vertices[face.a].clone()
-            .add(geometry.vertices[face.b])
-            .add(geometry.vertices[face.c])
-            .divideScalar(3);
-}
-
+const SPHERE_RADIUS = 200;
 const UP_VECTOR = new Vector3(0, 1, 0);
 
 class MainScene extends Scene {
@@ -23,34 +16,28 @@ class MainScene extends Scene {
         super();
 
         // set the space-sphere bounding box
-        this.fog = new Fog(0xcccccc, 0, 350);
+        this.fog = new Fog(0xcccccc, 0, 350); // fog makes the background look cooler + asteroids fade away instead of disappearing
 
         const spaceTexture = new TextureLoader().load("src/components/textures/nebula.png");
-        const backgroundSphere = new SphereGeometry(200, 40, 20);
-        backgroundSphere.scale(-1, 1, 1);
+        const backgroundSphere = new SphereGeometry(SPHERE_RADIUS, 40, 20);
         const backgroundMat = new MeshBasicMaterial({map: spaceTexture});
         const backgroundMesh = new Mesh(backgroundSphere, backgroundMat);
+        backgroundSphere.scale(-1, 1, 1);
         this.add(backgroundMesh);
 
-        // Add meshes to scene
         this.planet = new Planet("Planet1");
-
-        // old basic sphere planet
-        // const geometry = new SphereGeometry(SPHERE_RADIUS);
-        // const material = new MeshToonMaterial({ color: 0x00ff00});
-        // this.planet = new Mesh(geometry, material);
 
         // X is red, Y is green, Z is blue
         this.planet.add(new AxesHelper(5));
 
         const lights = new BasicLights();
-        this.add(lights, this.planet);
 
         // ASTEROID TESTING
-        this.asteroid = new Asteroid("Asteroid1");
-        this.add(this.asteroid);
-        // this.asteroid.translateX(100);
+        // this.asteroid = new Asteroid("Asteroid1");
+        // this.add(this.asteroid);
+        this.asteroids = new AsteroidManager(30, 100);
 
+        this.add(lights, this.planet, this.asteroids);
     }
 
     plantFlower(pos, face) {
@@ -63,6 +50,11 @@ class MainScene extends Scene {
 
     getPlanet() {
         return this.planet;
+    }
+
+    update(timestamp) {
+        // updates 60 times a second
+        this.asteroids.update(timestamp)
     }
 
 }

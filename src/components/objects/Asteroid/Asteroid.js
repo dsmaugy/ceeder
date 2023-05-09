@@ -24,7 +24,6 @@ class Asteroid extends Group {
         this.objLoader.load(name, (obj) => {
             this.add(obj);
             obj.name = "internal_asteroid_group";
-            console.log(obj);
         });
     }
 }
