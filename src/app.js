@@ -6,19 +6,46 @@
  * handles window resizes.
  *
  */
-import { WebGLRenderer, PerspectiveCamera, Vector3, Raycaster, Vector2, Mesh, ArrowHelper } from 'three';
+import { WebGLRenderer, PerspectiveCamera, Vector3, OrthographicCamera, Raycaster, Vector2, Mesh, ArrowHelper} from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { MainScene } from 'scenes';
 import AudioManager from './components/audio/AudioManager';
+import { MainScene, UIScene } from 'scenes';
 
+const { innerHeight, innerWidth } = window;
 // Initialize core ThreeJS components
 const scene = new MainScene();
-const camera = new PerspectiveCamera();
-const renderer = new WebGLRenderer({ antialias: true });
+const renderer = new WebGLRenderer({ antialias: true,});
+renderer.autoClear = false;
 
+// Perspective
+const camera = new PerspectiveCamera();
 // Set up camera
 camera.position.set(6, 3, -10);
 camera.lookAt(new Vector3(0, 0, 0));
+
+//Orthographic
+const orthographicSize = 15;
+const aspect = innerWidth / innerHeight;
+const uiCamera = new OrthographicCamera(
+    -orthographicSize * aspect / 2,
+    orthographicSize * aspect / 2,
+    orthographicSize / 2,
+    -orthographicSize / 2
+    );
+
+// UI camera setup
+uiCamera.position.set(0, 0, orthographicSize);
+uiCamera.lookAt(new Vector3(0, 0, 0));
+uiCamera.aspect = aspect;
+
+// Scene setup
+const uiScene = new UIScene(uiCamera.right, uiCamera.top);
+
+// var RoundedBoxGeometry = require('three-rounded-box')(THREE); //pass your instance of three
+// var myBox = new THREE.Mesh( new RoundedBoxGeometry( 10 , 10 , 10 , 2 , 5 ) );
+// scene.add(myBox);
+
+
 
 // Set up renderer, canvas, and minor CSS adjustments
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -36,9 +63,6 @@ controls.minDistance = 4;
 controls.maxDistance = 16;
 controls.update();
 
-// set up audio
-const audioManager = new AudioManager();
-camera.add(audioManager);
 
 
 // raycaster example from https://threejs.org/docs/#api/en/core/Raycaster
@@ -53,39 +77,20 @@ function updatePointer(event) {
     pointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
 }
 
-// function isPlanet(obj) {
-//     let objIter = obj;
-//     while (objIter) {
-//         if (objIter.name === "planet") {
-//             return true;
-//         }
-
-//         objIter = objIter.parent;
-//     }
-
-//     return false;
-// }
-
 function addFlower() {
     raycaster.setFromCamera(pointer, camera);
 
-    const intersects = raycaster.intersectObject(scene.getPlanet().model);
-    console.log(intersects)
-    for (let i = 0; i < intersects.length; i++) {
-        if (intersects[i].object instanceof Mesh && intersects[i].object.name === "Icosphere") { // TODO: hardcoded to model of planet name
-            scene.plantFlower(intersects[i].point, intersects[i].face);
-            // scene.add(new ArrowHelper(intersects[i].face.normal, intersects[i].point, 2, "red"));
-            break;
-        }
+    const intersects = raycaster.intersectObject(scene.getSphere());
+    if (intersects.length === 1) {
+        scene.plantFlower(intersects[0].point, intersects[0].face);
     }
-
 }
 
 // Render loop
 const onAnimationFrameHandler = (timeStamp) => {
     controls.update();
-    scene.asteroid.translateZ(1);
     renderer.render(scene, camera);
+    renderer.render(uiScene, uiCamera);
     scene.update && scene.update(timeStamp);
     window.requestAnimationFrame(onAnimationFrameHandler);
 };
@@ -96,12 +101,69 @@ window.requestAnimationFrame(onAnimationFrameHandler);
 // Resize Handler
 const windowResizeHandler = () => {
     const { innerHeight, innerWidth } = window;
+    const aspect = innerWidth / innerHeight;
     renderer.setSize(innerWidth, innerHeight);
-    camera.aspect = innerWidth / innerHeight;
+
+    // Update Perspective Camera
+    camera.aspect = aspect;
     camera.updateProjectionMatrix();
+
+    // Update orthographic camera's dimensions based on aspect ratio
+    uiCamera.left = -orthographicSize * aspect / 2;
+    uiCamera.right = orthographicSize * aspect / 2;
+    uiCamera.top = orthographicSize / 2;
+    uiCamera.bottom = -orthographicSize / 2;
+
+    uiCamera.aspect = innerWidth / innerHeight;
+    uiCamera.updateProjectionMatrix();
+
+    // uiScene.update && uiScene.update(window);
 };
 windowResizeHandler();
 window.addEventListener('resize', windowResizeHandler, false);
 
 window.addEventListener('pointermove', updatePointer);
 window.addEventListener('mouseup', addFlower);
+
+window.addEventListener('pointermove', updatePointer);
+window.addEventListener('mouseup', addFlower);
+
+// Click Handler
+const onClickHandler = (event) => {
+    // Mouse Coordinates
+
+    const mouseX = event.clientX;
+    const mouseY = event.clientY;
+
+    // Screen -> NDC [this is within (-1,1)]
+    const mouseNDC = new Vector3(
+        (mouseX / window.innerWidth) * 2 - 1,
+        -(mouseY / window.innerHeight) * 2 +1,
+        0
+    );
+
+
+    // Unproject: NDC -> world
+    const worldCoords = new Vector3();
+    worldCoords.copy(mouseNDC).unproject(uiCamera);
+    console.log(worldCoords);
+    // Raycast
+    const raycaster = new Raycaster();
+    raycaster.layers.enableAll()
+    raycaster.setFromCamera(mouseNDC, uiCamera);
+
+    // console.log("clicked on screen coords: (" + mouseX + ", " + mouseY + ")" );
+    // console.log("clicked on world coords: (" + worldCoords.x + ", " + worldCoords.y + ", " + worldCoords.z + ")" );
+
+    const intersects = raycaster.intersectObjects(uiScene.children, true);
+    // console.log(uiScene.children);
+    // console.log(intersects);
+    if (intersects.length > 0) {
+        const clickedObject = intersects[0].object;
+
+        // console.log(clickedObject.getObjectByName);
+        console.log(clickedObject.name);
+
+    }
+}
+window.addEventListener('click', onClickHandler);
