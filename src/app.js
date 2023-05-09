@@ -6,11 +6,23 @@
  * handles window resizes.
  *
  */
+<<<<<<< HEAD
 import { WebGLRenderer, PerspectiveCamera, Vector3, OrthographicCamera, Raycaster, Vector2, Mesh, ArrowHelper} from 'three';
 // import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
 import AudioManager from './components/audio/AudioManager';
 import { MainScene, UIScene } from 'scenes';
+=======
+import {
+    WebGLRenderer,
+    PerspectiveCamera,
+    Vector3,
+    Raycaster,
+    Vector2,
+} from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { SeedScene } from 'scenes';
+>>>>>>> 6b2f923 (added seed)
 
 const { innerHeight, innerWidth } = window;
 // Initialize core ThreeJS components
@@ -79,7 +91,7 @@ function updatePointer(event) {
     // (-1 to +1) for both components
 
     pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-    pointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
+    pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 }
 
 function addFlower() {
@@ -96,6 +108,15 @@ function addFlower() {
     }
 }
 
+function addBush() {
+    raycaster.setFromCamera(pointer, camera);
+
+    const intersects = raycaster.intersectObject(scene.getSphere());
+    if (intersects.length === 1) {
+        scene.plantBush(intersects[0].point, intersects[0].face);
+    }
+}
+
 // Render loop
 const onAnimationFrameHandler = (timeStamp) => {
     controls.update();
@@ -106,8 +127,6 @@ const onAnimationFrameHandler = (timeStamp) => {
     window.requestAnimationFrame(onAnimationFrameHandler);
 };
 window.requestAnimationFrame(onAnimationFrameHandler);
-
-
 
 // Resize Handler
 const windowResizeHandler = () => {
