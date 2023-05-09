@@ -7,7 +7,8 @@
  *
  */
 import { WebGLRenderer, PerspectiveCamera, Vector3, OrthographicCamera, Raycaster, Vector2, Mesh, ArrowHelper} from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls'
 import AudioManager from './components/audio/AudioManager';
 import { MainScene, UIScene } from 'scenes';
 
@@ -56,13 +57,17 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
 document.body.appendChild(canvas);
 
 // Set up controls
-const controls = new OrbitControls(camera, canvas);
+const controls = new TrackballControls(camera, canvas);
 controls.enableDamping = true;
 controls.enablePan = false;
 controls.minDistance = 4;
 controls.maxDistance = 16;
 controls.update();
 
+
+// set up audio
+const audioManager = new AudioManager();
+camera.add(audioManager);
 
 
 // raycaster example from https://threejs.org/docs/#api/en/core/Raycaster
@@ -80,9 +85,14 @@ function updatePointer(event) {
 function addFlower() {
     raycaster.setFromCamera(pointer, camera);
 
+    // TODO: make this so you can't add flowers with a mouse click through other flowers / objects
     const intersects = raycaster.intersectObject(scene.getPlanet().model);
     if (intersects.length === 1) {
         scene.plantFlower(intersects[0].point, intersects[0].face);
+    console.log(intersects)
+    // if (intersects[0]) {
+        // scene.plantFlower(intersects[0].point, intersects[0].face);
+        // scene.add(new ArrowHelper(intersects[0].face.normal, intersects[0].point, 2, "red"));
     }
 }
 
@@ -92,6 +102,7 @@ const onAnimationFrameHandler = (timeStamp) => {
     renderer.render(scene, camera);
     renderer.render(uiScene, uiCamera);
     scene.update && scene.update(timeStamp);
+    // scene.update(timeStamp);
     window.requestAnimationFrame(onAnimationFrameHandler);
 };
 window.requestAnimationFrame(onAnimationFrameHandler);
@@ -121,9 +132,6 @@ const windowResizeHandler = () => {
 };
 windowResizeHandler();
 window.addEventListener('resize', windowResizeHandler, false);
-
-window.addEventListener('pointermove', updatePointer);
-window.addEventListener('mouseup', addFlower);
 
 window.addEventListener('pointermove', updatePointer);
 window.addEventListener('mouseup', addFlower);
@@ -167,3 +175,6 @@ const onClickHandler = (event) => {
     }
 }
 window.addEventListener('click', onClickHandler);
+// TODO: make this so you hvae to mousedown AND mouseup on the planet in order for the click to be registered
+// canvas.addEventListener('pointermove', updatePointer);
+// canvas.addEventListener('mouseup', addFlower);
