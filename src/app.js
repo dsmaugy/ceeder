@@ -6,28 +6,25 @@
  * handles window resizes.
  *
  */
-<<<<<<< HEAD
-import { WebGLRenderer, PerspectiveCamera, Vector3, OrthographicCamera, Raycaster, Vector2, Mesh, ArrowHelper} from 'three';
-// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
-import AudioManager from './components/audio/AudioManager';
-import { MainScene, UIScene } from 'scenes';
-=======
 import {
     WebGLRenderer,
     PerspectiveCamera,
     Vector3,
+    OrthographicCamera,
     Raycaster,
     Vector2,
+    Mesh,
+    ArrowHelper,
 } from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { SeedScene } from 'scenes';
->>>>>>> 6b2f923 (added seed)
+// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
+import AudioManager from './components/audio/AudioManager';
+import { MainScene, UIScene } from 'scenes';
 
 const { innerHeight, innerWidth } = window;
 // Initialize core ThreeJS components
 const scene = new MainScene();
-const renderer = new WebGLRenderer({ antialias: true,});
+const renderer = new WebGLRenderer({ antialias: true });
 renderer.autoClear = false;
 
 // Perspective
@@ -40,11 +37,11 @@ camera.lookAt(new Vector3(0, 0, 0));
 const orthographicSize = 15;
 const aspect = innerWidth / innerHeight;
 const uiCamera = new OrthographicCamera(
-    -orthographicSize * aspect / 2,
-    orthographicSize * aspect / 2,
+    (-orthographicSize * aspect) / 2,
+    (orthographicSize * aspect) / 2,
     orthographicSize / 2,
     -orthographicSize / 2
-    );
+);
 
 // UI camera setup
 uiCamera.position.set(0, 0, orthographicSize);
@@ -57,8 +54,6 @@ const uiScene = new UIScene(uiCamera.right, uiCamera.top);
 // var RoundedBoxGeometry = require('three-rounded-box')(THREE); //pass your instance of three
 // var myBox = new THREE.Mesh( new RoundedBoxGeometry( 10 , 10 , 10 , 2 , 5 ) );
 // scene.add(myBox);
-
-
 
 // Set up renderer, canvas, and minor CSS adjustments
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -76,11 +71,9 @@ controls.minDistance = 4;
 controls.maxDistance = 16;
 controls.update();
 
-
 // set up audio
-const audioManager = new AudioManager();
-camera.add(audioManager);
-
+// const audioManager = new AudioManager();
+// camera.add(audioManager);
 
 // raycaster example from https://threejs.org/docs/#api/en/core/Raycaster
 const raycaster = new Raycaster();
@@ -102,7 +95,7 @@ function addFlower() {
     if (intersects.length === 1) {
         scene.plantFlower(intersects[0].point, intersects[0].face);
         console.log(intersects);
-    // if (intersects[0]) {
+        // if (intersects[0]) {
         // scene.plantFlower(intersects[0].point, intersects[0].face);
         // scene.add(new ArrowHelper(intersects[0].face.normal, intersects[0].point, 2, "red"));
     }
@@ -111,7 +104,8 @@ function addFlower() {
 function addBush() {
     raycaster.setFromCamera(pointer, camera);
 
-    const intersects = raycaster.intersectObject(scene.getSphere());
+    const intersects = raycaster.intersectObject(scene.getPlanet().model);
+    console.log(intersects);
     if (intersects.length === 1) {
         scene.plantBush(intersects[0].point, intersects[0].face);
     }
@@ -139,8 +133,8 @@ const windowResizeHandler = () => {
     camera.updateProjectionMatrix();
 
     // Update orthographic camera's dimensions based on aspect ratio
-    uiCamera.left = -orthographicSize * aspect / 2;
-    uiCamera.right = orthographicSize * aspect / 2;
+    uiCamera.left = (-orthographicSize * aspect) / 2;
+    uiCamera.right = (orthographicSize * aspect) / 2;
     uiCamera.top = orthographicSize / 2;
     uiCamera.bottom = -orthographicSize / 2;
 
@@ -153,7 +147,7 @@ windowResizeHandler();
 window.addEventListener('resize', windowResizeHandler, false);
 
 window.addEventListener('pointermove', updatePointer);
-window.addEventListener('mouseup', addFlower);
+window.addEventListener('mouseup', addBush);
 
 // Click Handler
 const onClickHandler = (event) => {
@@ -165,10 +159,9 @@ const onClickHandler = (event) => {
     // Screen -> NDC [this is within (-1,1)]
     const mouseNDC = new Vector3(
         (mouseX / window.innerWidth) * 2 - 1,
-        -(mouseY / window.innerHeight) * 2 +1,
+        -(mouseY / window.innerHeight) * 2 + 1,
         0
     );
-
 
     // Unproject: NDC -> world
     const worldCoords = new Vector3();
@@ -176,8 +169,10 @@ const onClickHandler = (event) => {
     console.log(worldCoords);
     // Raycast
     const raycaster = new Raycaster();
-    raycaster.layers.enableAll()
+    raycaster.layers.enableAll();
     raycaster.setFromCamera(mouseNDC, uiCamera);
+
+    addBush();
 
     // console.log("clicked on screen coords: (" + mouseX + ", " + mouseY + ")" );
     // console.log("clicked on world coords: (" + worldCoords.x + ", " + worldCoords.y + ", " + worldCoords.z + ")" );
@@ -190,7 +185,6 @@ const onClickHandler = (event) => {
 
         // console.log(clickedObject.getObjectByName);
         console.log(clickedObject.name);
-
     }
 };
 window.addEventListener('click', onClickHandler);
