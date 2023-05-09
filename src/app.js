@@ -8,7 +8,7 @@
  */
 import { WebGLRenderer, PerspectiveCamera, Vector3, OrthographicCamera, Raycaster, Vector2, Mesh, ArrowHelper} from 'three';
 // import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls'
+import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
 import AudioManager from './components/audio/AudioManager';
 import { MainScene, UIScene } from 'scenes';
 
@@ -173,7 +173,7 @@ const onClickHandler = (event) => {
         console.log(clickedObject.name);
 
     }
-}
+};
 window.addEventListener('click', onClickHandler);
 // TODO: make this so you hvae to mousedown AND mouseup on the planet in order for the click to be registered
 // canvas.addEventListener('pointermove', updatePointer);

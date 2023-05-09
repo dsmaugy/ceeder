@@ -5,7 +5,7 @@ import { BasicLights } from 'lights';
 import { SphereGeometry, MeshToonMaterial, Mesh, Euler } from 'three';
 import Planet from '../objects/Planet/Planet';
 import Asteroid from '../objects/Asteroid/Asteroid';
-const SPHERE_RADIUS = 3;
+const SPHERE_RADIUS = 200;
 
 function getFaceCentroid(geometry, face) {
     return geometry.vertices[face.a].clone()
