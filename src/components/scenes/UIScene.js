@@ -26,15 +26,18 @@ class UIScene extends Scene {
         flowerSelect.SetPosition(-1, -camY + flowerSelect.length/2, 0);
         this.add( flowerSelect);
 
-        const flowerOne = new RoundedButton(camX/5, camY/4, 1, 0xff0000, "flowerOne");
+        // const flowerOne = new RoundedButton(camX/5, camY/4, 1, 0xff0000, "flowerOne");
+        const flowerOne = new RoundedButton(camX/5, camX/5, 1, 0xff0000, "flowerOne");
         flowerOne.SetPosition(-1 - flowerSelect.width/4, -camY + flowerSelect.length/2, 1);
         this.add( flowerOne );
 
-        const flowerTwo = new RoundedButton(camX/5, camY/4, 1, 0x00ff00, "flowerTwo");
+        // const flowerTwo = new RoundedButton(camX/5, camY/4, 1, 0x00ff00, "flowerTwo");
+        const flowerTwo = new RoundedButton(camX/5, camX/5, 1, 0x00ff00, "flowerTwo");
         flowerTwo.SetPosition(-1 , -camY + flowerSelect.length/2, 1);
         this.add( flowerTwo );
         
-        const flowerThree = new RoundedButton(camX/5, camY/4, 1, 0x0000ff, "flowerThree");
+        // const flowerThree = new RoundedButton(camX/5, camY/4, 1, 0x0000ff, "flowerThree");
+        const flowerThree = new RoundedButton(camX/5, camX/5, 1, 0x0000ff, "flowerThree");
         flowerThree.SetPosition(-1 + flowerSelect.width/4, -camY + flowerSelect.length/2, 1);
         this.add( flowerThree );
 
@@ -42,16 +45,19 @@ class UIScene extends Scene {
         planetSelect.SetPosition(camX - planetSelect.width/2, -camY/2, 0);
         this.add( planetSelect );
         
-        const planetOne = new RoundedButton(camX*.2, camY*.25, 1, 0xff0000, "planetOne");
-        planetOne.SetPosition(camX - planetSelect.width/2, -camY/2 + planetSelect.length/4, 1);
+        // const planetOne = new RoundedButton(camX*.2, camY*.25, 1, 0xff0000, "planetOne");
+        const planetOne = new RoundedButton(camY*.25, camY*.25, 1, 0xff0000, "planetOne");
+        planetOne.SetPosition(camX - planetSelect.width/2, -camY/2 + planetSelect.length* 3/10, 1);
         this.add( planetOne );
         
-        const planetTwo = new RoundedButton(camX*.2, camY*.25, 1, 0x00ff00, "planetTwo");
+        // const planetTwo = new RoundedButton(camX*.2, camY*.25, 1, 0x00ff00, "planetTwo");
+        const planetTwo = new RoundedButton(camY*.25, camY*.25, 1, 0x00ff00, "planetTwo");
         planetTwo.SetPosition(camX - planetSelect.width/2, -camY/2, 1);
         this.add( planetTwo );
         
-        const planetThree = new RoundedButton(camX*.2, camY*.25, 1, 0x0000ff, "planetThree");
-        planetThree.SetPosition(camX - planetSelect.width/2, -camY/2 - planetSelect.length/4, 1);
+        // const planetThree = new RoundedButton(camX*.2, camY*.25, 1, 0x0000ff, "planetThree");
+        const planetThree = new RoundedButton(camY*.25, camY*.25, 1, 0x0000ff, "planetThree");
+        planetThree.SetPosition(camX - planetSelect.width/2, -camY/2 - planetSelect.length* 3/10, 1);
         this.add( planetThree );
 
         // const day
