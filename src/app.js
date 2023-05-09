@@ -80,7 +80,7 @@ function updatePointer(event) {
 function addFlower() {
     raycaster.setFromCamera(pointer, camera);
 
-    const intersects = raycaster.intersectObject(scene.getSphere());
+    const intersects = raycaster.intersectObject(scene.getPlanet().model);
     if (intersects.length === 1) {
         scene.plantFlower(intersects[0].point, intersects[0].face);
     }
