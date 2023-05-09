@@ -4,20 +4,12 @@ import { Flower, Land } from 'objects';
 import { BasicLights } from 'lights';
 import { SphereGeometry, MeshToonMaterial, Mesh, Euler } from 'three';
 import Planet from '../objects/Planet/Planet';
-import Asteroid from '../objects/Asteroid/Asteroid';
-const SPHERE_RADIUS = 200;
-
-function getFaceCentroid(geometry, face) {
-    return geometry.vertices[face.a].clone()
-            .add(geometry.vertices[face.b])
-            .add(geometry.vertices[face.c])
-            .divideScalar(3);
-}
-
 import AsteroidManager from './AsteroidManager';
 
 const UP_VECTOR = new Vector3(0, 1, 0);
 const SECONDS_PER_DAY = 5;
+const SPHERE_RADIUS = 200;
+
 
 class MainScene extends Scene {
     constructor() {

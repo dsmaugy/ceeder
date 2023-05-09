@@ -89,7 +89,7 @@ function addFlower() {
     const intersects = raycaster.intersectObject(scene.getPlanet().model);
     if (intersects.length === 1) {
         scene.plantFlower(intersects[0].point, intersects[0].face);
-    console.log(intersects)
+        console.log(intersects);
     // if (intersects[0]) {
         // scene.plantFlower(intersects[0].point, intersects[0].face);
         // scene.add(new ArrowHelper(intersects[0].face.normal, intersects[0].point, 2, "red"));
