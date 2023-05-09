@@ -57,4 +57,48 @@ window.addEventListener('resize', windowResizeHandler, false);
 window.onload = (event) => {
   var audio = new Audio('music.mp3');
   audio.play();
+=======
+window.addEventListener('pointermove', updatePointer);
+window.addEventListener('mouseup', addFlower);
+
+// Click Handler
+const onClickHandler = (event) => {
+    // Mouse Coordinates
+
+    const mouseX = event.clientX;
+    const mouseY = event.clientY;
+
+    // Screen -> NDC [this is within (-1,1)]
+    const mouseNDC = new Vector3(
+        (mouseX / window.innerWidth) * 2 - 1,
+        -(mouseY / window.innerHeight) * 2 +1,
+        0
+    );
+
+
+    // Unproject: NDC -> world
+    const worldCoords = new Vector3();
+    worldCoords.copy(mouseNDC).unproject(uiCamera);
+    //console.log(worldCoords);
+    // Raycast
+    const raycaster = new Raycaster();
+    raycaster.layers.enableAll()
+    raycaster.setFromCamera(mouseNDC, uiCamera);
+
+    // console.log("clicked on screen coords: (" + mouseX + ", " + mouseY + ")" );
+    // console.log("clicked on world coords: (" + worldCoords.x + ", " + worldCoords.y + ", " + worldCoords.z + ")" );
+
+    const intersects = raycaster.intersectObjects(uiScene.children, true);
+    // console.log(uiScene.children);
+    // console.log(intersects);
+      if (intersects.length > 0) {
+          const clickedObject = intersects[0].object;
+
+          // console.log(clickedObject.getObjectByName);
+          //console.log(clickedObject.name);
+          scene.changePlanet(clickedObject.name);
+
+    }
+
+>>>>>>> Stashed changes
 };
