@@ -40,7 +40,7 @@ class MainScene extends Scene {
         // ASTEROID TESTING
         // this.asteroid = new Asteroid("Asteroid1");
         // this.add(this.asteroid);
-        this.asteroids = new AsteroidManager(30, 100);
+        this.asteroids = new AsteroidManager(100, 200);
 
         this.add(this.lights, this.planet, this.asteroids);
     }

@@ -2,7 +2,7 @@ import { DepthFormat, Group, Vector3 } from "three";
 import { getRandomNumber } from "../../util";
 import Asteroid from "../objects/Asteroid/Asteroid";
 
-const SPAWN_RATE = 0.4;
+const SPAWN_RATE = 0.1;
 const DESPAWN_BOUNDARY = 200;
 
 class AsteroidManager extends Group {
@@ -17,11 +17,12 @@ class AsteroidManager extends Group {
         this.spawnAsteroidAt(-10, 5, 0);
         this.spawnAsteroidAt(5, -10, -10);
 
+        this.lastSpawnCheck = 0;
     }
 
     spawnAsteroidAt(x, y, z) {
-        let r = getRandomNumber(1, 4);
-        const asteroid = new Asteroid("Asteroid" + r);
+        let r = Math.floor(getRandomNumber(1, 4));
+        const asteroid = new Asteroid("Asteroid" + r, getRandomNumber(0.05, 0.08), getRandomNumber(0.01, 0.05), getRandomNumber(0.05, 0.1));
 
         asteroid.position.setX(x);
         asteroid.position.setY(y);
@@ -35,22 +36,22 @@ class AsteroidManager extends Group {
     spawnRandomAsteroid() {
 
 
-        let posX = getRandomNumber(this.minR, this.maxR);
-        let posY = getRandomNumber(this.minR, this.maxR);
-        let posZ = getRandomNumber(this.minR, this.maxR);
 
-        if (Math.random() < 0.5) {
-            posX *= -1;
-        }
+        let u = getRandomNumber(0, 1);
+        let v = getRandomNumber(0, 1);
+        console.log(u);
+        console.log(v);
+        let theta = 2*Math.PI*u;
+        let phi = Math.acos(2*v-1);
+        let p = getRandomNumber(this.minR, this.maxR);
 
-        if (Math.random() < 0.5) {
-            posY *= -1;
-        }
+        let posX = p*Math.sin(phi)*Math.cos(theta);
+        let posY = p*Math.sin(phi)*Math.cos(theta);
+        let posZ = p*Math.cos(phi);
 
-        if (Math.random() < 0.5) {
-            posZ *= -1;
-        }
-
+        console.log(posX);
+        console.log(posY);
+        console.log(posZ);
 
         this.spawnAsteroidAt(posX, posY, posZ);
 
@@ -58,10 +59,13 @@ class AsteroidManager extends Group {
 
     update(timestamp) {
         // periodically spawn more asteroids
-        if (Math.trunc(timestamp) % 41 == 0) {
+        let sec = Math.round(timestamp / 1000);
+        if (sec % 5 === 0 && this.lastSpawnCheck != sec) {
             if (Math.random() < SPAWN_RATE) {
                 this.spawnRandomAsteroid();
             }
+
+            // this.lastSpawnCheck = sec;
         }
 
 
@@ -70,14 +74,13 @@ class AsteroidManager extends Group {
         let removals = []
         this.asteroids.forEach((asteroid, i) => {
             // WARN: do NOT make this a quaternion... worst mistake of my life!!!!
-            asteroid.rotation.x += getRandomNumber(0.1, 0.2);
-            // asteroid.rotation.y += getRandomNumber(0.2, 1);
-            // asteroid.rotation.z += getRandomNumber(0.1, 0.3);
+            asteroid.rotation.x += asteroid.rotX;
+            asteroid.rotation.y += asteroid.rotY;
 
             if (asteroid.position.x > 0) {
-                asteroid.position.x += getRandomNumber(0.1, 1);
+                asteroid.position.x += asteroid.trans;
             } else {
-                asteroid.position.x -= getRandomNumber(-1, 0);
+                asteroid.position.x -= asteroid.trans;
             }
 
             if (Math.abs(asteroid.position.x) > DESPAWN_BOUNDARY) {
@@ -86,11 +89,11 @@ class AsteroidManager extends Group {
         });
 
         removals.forEach((idx) => {
-            console.log("deleting " + idx);
+            // console.log("deleting " + idx);
             this.remove(this.asteroids[idx]);
             this.asteroids.splice(idx, 1);
 
-            console.log(this.asteroids);
+            // console.log(this.asteroids);
         })
 
     
