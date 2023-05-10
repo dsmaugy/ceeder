@@ -16,18 +16,19 @@ class UIScene extends Scene {
 
         // Current Flower Display UI Elements
 
-        const currFlower = new RoundedButton(camX*.4, camX*.4, 1, 0xc072d4, "currFlower");
-        currFlower.SetPosition(-camX + currFlower.width/2, -camY + currFlower.length/2, 0);
-        this.add( currFlower );
+        // const currFlower = new RoundedButton(camX*.4, camX*.4, 1, 0xc072d4, "currFlower");
+        // currFlower.SetPosition(-camX + currFlower.width/2, -camY + currFlower.length/2, 0);
+        // this.add( currFlower );
 
-        const flowerZero = new RoundedButton(currFlower.width*.9, currFlower.width*.9, 2, 0xff0000, "flowerZero");
-        flowerZero.SetPosition(currFlower.position.x, currFlower.position.y, 0);
-        this.add( flowerZero );
+        // const flowerZero = new RoundedButton(currFlower.width*.9, currFlower.width*.9, 2, 0xff0000, "flowerZero");
+        // flowerZero.SetPosition(currFlower.position.x, currFlower.position.y, 0);
+        // this.add( flowerZero );
         
         // Flower Selection UI elements
 
-        const flowerSelect = new RoundedButton(camX*.6, camY/3, 1, 0xc072d4, "flowerSelect");
-        flowerSelect.SetPosition(-camX/3, -camY + flowerSelect.length/2, 0);
+        const flowerSelect = new RoundedButton(camX*.6, camY/3, 1, 0xE7A2F9, "flowerSelect");
+        // flowerSelect.SetPosition(-camX/3, -camY + flowerSelect.length/2, 0);
+        flowerSelect.SetPosition(-camX + flowerSelect.width/2, -camY + flowerSelect.length/2, 0);
         this.add( flowerSelect );
 
         let fbuttonlen = flowerSelect.width*.25;
@@ -46,7 +47,7 @@ class UIScene extends Scene {
 
 
         // Planet selection UI Elements
-        const planetSelect = new RoundedButton(camX*.2, camY, 1, 0xc072d4, "planetSelect");
+        const planetSelect = new RoundedButton(camX*.2, camY, 1, 0xE7A2F9, "planetSelect");
         planetSelect.SetPosition(camX - planetSelect.width/2, -camY/2, 0);
         this.add( planetSelect );
 
