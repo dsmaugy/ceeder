@@ -6,7 +6,16 @@
  * handles window resizes.
  *
  */
-import { WebGLRenderer, PerspectiveCamera, Vector3, OrthographicCamera, Raycaster, Vector2, Mesh, ArrowHelper} from 'three';
+import {
+    WebGLRenderer,
+    PerspectiveCamera,
+    Vector3,
+    OrthographicCamera,
+    Raycaster,
+    Vector2,
+    Mesh,
+    ArrowHelper,
+} from 'three';
 // import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
 import AudioManager from './components/audio/AudioManager';
@@ -15,7 +24,7 @@ import { MainScene, UIScene } from 'scenes';
 const { innerHeight, innerWidth } = window;
 // Initialize core ThreeJS components
 const scene = new MainScene();
-const renderer = new WebGLRenderer({ antialias: true,});
+const renderer = new WebGLRenderer({ antialias: true });
 renderer.autoClear = false;
 
 // Perspective
@@ -28,11 +37,11 @@ camera.lookAt(new Vector3(0, 0, 0));
 const orthographicSize = 15;
 const aspect = innerWidth / innerHeight;
 const uiCamera = new OrthographicCamera(
-    -orthographicSize * aspect / 2,
-    orthographicSize * aspect / 2,
+    (-orthographicSize * aspect) / 2,
+    (orthographicSize * aspect) / 2,
     orthographicSize / 2,
     -orthographicSize / 2
-    );
+);
 
 // UI camera setup
 uiCamera.position.set(0, 0, orthographicSize);
@@ -41,6 +50,12 @@ uiCamera.aspect = aspect;
 
 // Scene setup
 const uiScene = new UIScene(uiCamera.right, uiCamera.top);
+
+// var RoundedBoxGeometry = require('three-rounded-box')(THREE); //pass your instance of three
+// var myBox = new THREE.Mesh( new RoundedBoxGeometry( 10 , 10 , 10 , 2 , 5 ) );
+// scene.add(myBox);
+
+
 
 // Set up renderer, canvas, and minor CSS adjustments
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -58,11 +73,9 @@ controls.minDistance = 4;
 controls.maxDistance = 16;
 controls.update();
 
-
 // set up audio
-const audioManager = new AudioManager();
-camera.add(audioManager);
-
+// const audioManager = new AudioManager();
+// camera.add(audioManager);
 
 // raycaster example from https://threejs.org/docs/#api/en/core/Raycaster
 const raycaster = new Raycaster();
@@ -73,21 +86,17 @@ function updatePointer(event) {
     // (-1 to +1) for both components
 
     pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-    pointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
+    pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 }
 
-function addFlower() {
+function addBush(intersect) {
     raycaster.setFromCamera(pointer, camera);
+    scene.plantBush(intersect.point, intersect.face);
+}
 
-    // TODO: make this so you can't add flowers with a mouse click through other flowers / objects
-    const intersects = raycaster.intersectObject(scene.getPlanet().model);
-    if (intersects.length === 1) {
-        scene.plantFlower(intersects[0].point, intersects[0].face);
-        console.log(intersects);
-    // if (intersects[0]) {
-        // scene.plantFlower(intersects[0].point, intersects[0].face);
-        // scene.add(new ArrowHelper(intersects[0].face.normal, intersects[0].point, 2, "red"));
-    }
+function growBush(bush) {
+    raycaster.setFromCamera(pointer, camera);
+    scene.growBush(bush);
 }
 
 // Render loop
@@ -101,8 +110,6 @@ const onAnimationFrameHandler = (timeStamp) => {
 };
 window.requestAnimationFrame(onAnimationFrameHandler);
 
-
-
 // Resize Handler
 const windowResizeHandler = () => {
     const { innerHeight, innerWidth } = window;
@@ -114,8 +121,8 @@ const windowResizeHandler = () => {
     camera.updateProjectionMatrix();
 
     // Update orthographic camera's dimensions based on aspect ratio
-    uiCamera.left = -orthographicSize * aspect / 2;
-    uiCamera.right = orthographicSize * aspect / 2;
+    uiCamera.left = (-orthographicSize * aspect) / 2;
+    uiCamera.right = (orthographicSize * aspect) / 2;
     uiCamera.top = orthographicSize / 2;
     uiCamera.bottom = -orthographicSize / 2;
 
@@ -128,7 +135,6 @@ windowResizeHandler();
 window.addEventListener('resize', windowResizeHandler, false);
 
 window.addEventListener('pointermove', updatePointer);
-window.addEventListener('mouseup', addFlower);
 
 // Click Handler
 const onClickHandler = (event) => {
@@ -140,10 +146,9 @@ const onClickHandler = (event) => {
     // Screen -> NDC [this is within (-1,1)]
     const mouseNDC = new Vector3(
         (mouseX / window.innerWidth) * 2 - 1,
-        -(mouseY / window.innerHeight) * 2 +1,
+        -(mouseY / window.innerHeight) * 2 + 1,
         0
     );
-
 
     // Unproject: NDC -> world
     const worldCoords = new Vector3();
@@ -151,18 +156,56 @@ const onClickHandler = (event) => {
     console.log(worldCoords);
     // Raycast
     const raycaster = new Raycaster();
-    raycaster.layers.enableAll()
+    raycaster.layers.enableAll();
     raycaster.setFromCamera(mouseNDC, uiCamera);
 
-    const intersects = raycaster.intersectObjects(uiScene.children, true);
-    
+    const intersects = [];
+    let clickedBush;
+
+
+    raycaster.intersectObjects(uiScene.children, true).forEach((intersect) => {
+        intersects.push(intersect);
+    });
+
+    raycaster.setFromCamera(pointer, camera);
+    scene.getPlanet().children.forEach((obj) => {
+        if (obj.name === 'bush') {
+            raycaster.intersectObject(obj, true).forEach((intersect) => {
+                intersects.push(intersect);
+                clickedBush = obj;
+            });
+        }
+    });
+    raycaster.intersectObject(scene.getPlanet().model).forEach((intersect) => {
+        intersects.push(intersect);
+    });
+    // console.log(uiScene.children);
+    // console.log(intersects);
     if (intersects.length > 0) {
         const clickedObject = intersects[0].object;
         console.log(clickedObject.name);
 
+        // Planet element/models
+        if (clickedObject.name == 'Icosphere') {
+            addBush(intersects[0]);
+        } else if (
+            clickedObject.name === 'leaves' ||
+            clickedObject.name === 'branch'
+        ) {
+            growBush(clickedBush);
+        }
 
-
+        // UI elements/button selection
+        if (clickedObject.name == 'planetOne' ||
+            clickedObject.name == 'planetTwo' || 
+            clickedObject.name == 'planetThree'
+        ) {
+            console.log(clickedObject.name);
+            // scene.changePlanet(clickedObject.name);
+        }
     }
+
 };
 window.addEventListener('click', onClickHandler);
 // TODO: make this so you hvae to mousedown AND mouseup on the planet in order for the click to be registered
+
