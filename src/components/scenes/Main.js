@@ -49,7 +49,7 @@ class MainScene extends Scene {
         this.add(backgroundMesh);
 
         // TODO: add slow auto rotation?
-        this.planet = new Planet('Planet1');
+        this.planet = new Planet('Planet2');
 
         // X is red, Y is green, Z is blue
         this.planet.add(new AxesHelper(5));
