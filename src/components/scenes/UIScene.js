@@ -34,7 +34,7 @@ class UIScene extends Scene {
         flowerSelect.SetPosition(-camX/3, -camY + flowerSelect.length/2, 0);
         this.add( flowerSelect );
 
-        let fbuttonlen = flowerSelect.length*.8;
+        let fbuttonlen = flowerSelect.width*.25;
 
         const flowerOne = new RoundedButton(fbuttonlen, fbuttonlen, 1, 0xff0000, "flowerOne");
         flowerOne.SetPosition(flowerSelect.position.x - (flowerSelect.width*.3), -camY + flowerSelect.length/2, 1);
