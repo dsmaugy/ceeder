@@ -222,7 +222,7 @@ const onClickHandler = (event) => {
             clickedObject.name == 'lightTwo' || 
             clickedObject.name == 'lightThree'
         ) {
-            scene.changeSunlightColor(clickedObject.color);
+            scene.changeSunlightColor(clickedObject.material.color);
         }
     }
 

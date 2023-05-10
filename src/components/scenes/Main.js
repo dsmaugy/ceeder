@@ -25,7 +25,7 @@ import Planet from '../objects/Planet/Planet';
 import AsteroidManager from './AsteroidManager';
 
 const UP_VECTOR = new Vector3(0, 1, 0);
-const SECONDS_PER_DAY = 60;
+const SECONDS_PER_DAY = 10;
 const SPHERE_RADIUS = 200;
 
 class MainScene extends Scene {

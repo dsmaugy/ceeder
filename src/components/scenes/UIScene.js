@@ -33,15 +33,15 @@ class UIScene extends Scene {
 
         let fbuttonlen = flowerSelect.width*.25;
 
-        const lightOne = new RoundedButton(fbuttonlen, fbuttonlen, 1, 0xff0000, "lightOne");
+        const lightOne = new RoundedButton(fbuttonlen, fbuttonlen, 1, 0xedcc72, "lightOne");
         lightOne.SetPosition(flowerSelect.position.x - (flowerSelect.width*.3), -camY + flowerSelect.length/2, 1);
         this.add( lightOne );
 
-        const lightTwo = new RoundedButton(fbuttonlen, fbuttonlen, 1, 0x00ff00, "lightTwo");
+        const lightTwo = new RoundedButton(fbuttonlen, fbuttonlen, 1, 0xe38171, "lightTwo");
         lightTwo.SetPosition(flowerSelect.position.x - flowerSelect.width*0, -camY + flowerSelect.length/2, 1);
         this.add( lightTwo );
 
-        const lightThree = new RoundedButton(fbuttonlen, fbuttonlen, 1, 0x0000ff, "lightThree");
+        const lightThree = new RoundedButton(fbuttonlen, fbuttonlen, 1, 0x739fe6, "lightThree");
         lightThree.SetPosition(flowerSelect.position.x + flowerSelect.width*.3, -camY + flowerSelect.length/2, 1);
         this.add( lightThree );
 
