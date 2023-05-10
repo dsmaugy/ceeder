@@ -3,7 +3,7 @@ import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 
 class Asteroid extends Group {
-    constructor(objName) {
+    constructor(objName, rotX, rotY, translationSpeed) {
         // Call parent Group() constructor
         super();
 
@@ -18,6 +18,10 @@ class Asteroid extends Group {
             this.objLoader.setMaterials(mtl);
             this.loadAsteroid(objName + ".obj");
         });
+
+        this.rotX = rotX;
+        this.rotY = rotY;
+        this.trans = translationSpeed;
     }
 
     loadAsteroid(name) {
