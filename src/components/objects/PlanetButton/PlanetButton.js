@@ -9,7 +9,10 @@ class PlanetButton extends Group {
         const miniPlanet = new Planet(planetName, 0.25, planetName);
         miniPlanet.name = name;
         this.add(miniPlanet);
-        this.add(new DirectionalLight("white"))
+        const planetLight = new DirectionalLight("white", 0.65);
+        
+        planetLight.translateX(0.5);
+        this.add(planetLight);
     }
 
     SetPosition(x, y, z) {
