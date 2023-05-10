@@ -64,6 +64,12 @@ class MainScene extends Scene {
         this.add(this.lights, this.planet, this.asteroids);
     }
 
+    changePlanet(planetName) {
+        this.remove(this.planet);
+        this.planet = new Planet(planetName);
+        this.add(this.planet);
+    }
+
     plantFlower(pos, face) {
         const flower = new Flower(this.planet);
         flower.position.copy(pos);

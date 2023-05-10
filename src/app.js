@@ -196,12 +196,12 @@ const onClickHandler = (event) => {
         }
 
         // UI elements/button selection
-        if (clickedObject.name == 'planetOne' ||
-            clickedObject.name == 'planetTwo' || 
-            clickedObject.name == 'planetThree'
+        if (clickedObject.name == 'Planet1' ||
+            clickedObject.name == 'Planet2' || 
+            clickedObject.name == 'Planet3'
         ) {
             console.log(clickedObject.name);
-            // scene.changePlanet(clickedObject.name);
+            scene.changePlanet(clickedObject.name);
         }
     }
 
