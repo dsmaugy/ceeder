@@ -154,21 +154,15 @@ const onClickHandler = (event) => {
     raycaster.layers.enableAll()
     raycaster.setFromCamera(mouseNDC, uiCamera);
 
-    // console.log("clicked on screen coords: (" + mouseX + ", " + mouseY + ")" );
-    // console.log("clicked on world coords: (" + worldCoords.x + ", " + worldCoords.y + ", " + worldCoords.z + ")" );
-
     const intersects = raycaster.intersectObjects(uiScene.children, true);
-    // console.log(uiScene.children);
-    // console.log(intersects);
+    
     if (intersects.length > 0) {
         const clickedObject = intersects[0].object;
-
-        // console.log(clickedObject.getObjectByName);
         console.log(clickedObject.name);
+
+
 
     }
 };
 window.addEventListener('click', onClickHandler);
 // TODO: make this so you hvae to mousedown AND mouseup on the planet in order for the click to be registered
-// canvas.addEventListener('pointermove', updatePointer);
-// canvas.addEventListener('mouseup', addFlower);

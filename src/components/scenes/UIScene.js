@@ -30,26 +30,26 @@ class UIScene extends Scene {
         
         // Flower Selection UI elements
 
-        const flowerSelect = new RoundedButton(camX, camY/3, 1, 0xc072d4, "flowerSelect");
-        flowerSelect.SetPosition(-1, -camY + flowerSelect.length/2, 0);
+        const flowerSelect = new RoundedButton(camX*.75, camY/3, 1, 0xc072d4, "flowerSelect");
+        flowerSelect.SetPosition(-camX/7, -camY + flowerSelect.length/2, 0);
         this.add( flowerSelect );
 
-        let fbuttonlen = flowerSelect.length*.75;
+        let fbuttonlen = flowerSelect.width*.2;
 
         const flowerOne = new RoundedButton(fbuttonlen, fbuttonlen, 1, 0xff0000, "flowerOne");
-        flowerOne.SetPosition(flowerSelect.position.x - (flowerSelect.width*5/32 + fbuttonlen), -camY + flowerSelect.length/2, 1);
+        flowerOne.SetPosition(flowerSelect.position.x - (flowerSelect.width*.35), -camY + flowerSelect.length/2, 1);
         this.add( flowerOne );
 
         const flowerTwo = new RoundedButton(fbuttonlen, fbuttonlen, 1, 0x00ff00, "flowerTwo");
-        flowerTwo.SetPosition(flowerSelect.position.x - flowerSelect.width*3/32, -camY + flowerSelect.length/2, 1);
+        flowerTwo.SetPosition(flowerSelect.position.x - flowerSelect.width*.115, -camY + flowerSelect.length/2, 1);
         this.add( flowerTwo );
 
         const flowerThree = new RoundedButton(fbuttonlen, fbuttonlen, 1, 0x0000ff, "flowerThree");
-        flowerThree.SetPosition(flowerSelect.position.x + flowerSelect.width*3/32, -camY + flowerSelect.length/2, 1);
+        flowerThree.SetPosition(flowerSelect.position.x + flowerSelect.width*.115, -camY + flowerSelect.length/2, 1);
         this.add( flowerThree );
 
         const flowerFour = new RoundedButton(fbuttonlen, fbuttonlen, 1, 0x00ffff, "flowerFour");
-        flowerFour.SetPosition(flowerSelect.position.x + (flowerSelect.width*5/32 + fbuttonlen), -camY + flowerSelect.length/2, 1);
+        flowerFour.SetPosition(flowerSelect.position.x + (flowerSelect.width*.35), -camY + flowerSelect.length/2, 1);
         this.add( flowerFour );
 
         // Planet selection UI Elements
