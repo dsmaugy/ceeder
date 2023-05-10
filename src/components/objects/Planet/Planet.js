@@ -18,7 +18,7 @@ class Planet extends Group {
 
         this.mtlLoader.load(objName + '.mtl', (mtl) => {
             this.objLoader.setMaterials(mtl);
-            this.loadPlanet(objName + '.obj');
+            this.loadPlanet(objName);
         });
     }
 
