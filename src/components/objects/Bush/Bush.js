@@ -13,7 +13,7 @@ class Branch extends THREE.Mesh {
         this.currComplexity = 0;
 
         const { r1, r2, planet } = props;
-        this.length = planet === 'Planet3' ? 0.5 : 0.7;
+        this.length = planet === 'Planet3' ? 0.9 : 0.7;
 
         this.geometry = getBranchGeometry(planet, r1, r2, this.length);
         this.material = getBranchMat(planet);
@@ -31,9 +31,9 @@ class Leaves extends THREE.Mesh {
         const planet =
             props && props.planet !== undefined ? props.planet : 'Planet1';
 
-        this.scale.multiplyScalar((size * (complexity + 1)) / 3);
+        this.scale.multiplyScalar((size * complexity + 0.5) / 2);
 
-        if (planet === 'Planet1') this.scale.y = Math.random() * 0.5 + 0.2;
+        if (planet !== 'Planet2') this.scale.y = Math.random() * 0.5 + 0.2;
         this.rotation.z = (Math.random() - 1) / 2;
         this.rotation.x = (Math.random() - 1) / 5;
 
@@ -46,7 +46,7 @@ class Leaves extends THREE.Mesh {
 class Bush extends THREE.Group {
     constructor(parent) {
         super();
-        this.maxComplexity = 3;
+        this.maxComplexity = 4;
         this.name = 'bush';
         this.segments = [];
 
@@ -107,15 +107,11 @@ class Bush extends THREE.Group {
                 parentSegment.dir,
                 parentSegment.position
             );
-            position.y -= parentSegment.length / 4;
+            position.subScalar(parentSegment.length / 4);
 
             const numChildrenBranches = Math.floor(
                 Math.random() * parentSegment.currComplexity * 2
             );
-
-            const group = new THREE.Group();
-            this.add(group);
-
             // if parent has no child branches
             for (let i = 0; i < numChildrenBranches; i++) {
                 const newComplexity = parentSegment.currComplexity - 1;
@@ -131,6 +127,9 @@ class Bush extends THREE.Group {
                     (Math.random() * Math.PI) / 6 -
                     Math.PI / 3;
 
+                const group = new THREE.Group();
+                this.add(group);
+
                 // create child segment
                 const segment = new Branch({
                     r1: 2 / 50 / Math.log(newComplexity),
@@ -140,8 +139,6 @@ class Bush extends THREE.Group {
                 segment.position.y += segment.length / 2;
                 group.position.copy(position);
                 group.add(segment);
-
-                console.log(segment);
 
                 // get new direction and update child segment with new direction
                 const dir = this.up;

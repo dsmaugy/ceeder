@@ -22,6 +22,10 @@ class BasicLights extends Group {
         this.sunlight.position.setY(Math.cos(timeOfDay));
         this.sunlight.position.setZ(Math.sin(timeOfDay));
     }
+
+    changeLightColor(newColor) {
+        this.sunlight.color = newColor;
+    }
 }
 
 export default BasicLights;

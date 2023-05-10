@@ -2,7 +2,7 @@ import * as Dat from 'dat.gui';
 import { Scene, Color, Vector3 } from 'three';
 // import * as THREE from 'three';
 // import { Button } from 'ui';
-import { Button, RoundedButton, CircleButton } from 'objects';
+import { Button, RoundedButton, PlanetButton } from 'objects';
 // import { Flower, Land } from 'objects';
 // import { BasicLights } from 'lights';
 
@@ -53,17 +53,32 @@ class UIScene extends Scene {
 
         let pbuttonlen = planetSelect.width*.75;
         
-        const planetOne = new CircleButton(CIRCLE_RADIUS, CIRCLE_TRI, "src/components/textures/planets/Planet1.png", "Planet1");
-        planetOne.SetPosition(camX - planetSelect.width/2, -camY/2 + planetSelect.length* 3/10, 1);
-        this.add( planetOne );
+        this.planetOne = new PlanetButton("Planet1", "Planet1Button");
+        this.planetOne.SetPosition(camX - planetSelect.width/2, -camY/2 + planetSelect.length* 3/10, 1);
+        this.add( this.planetOne );
 
-        const planetTwo = new CircleButton(CIRCLE_RADIUS, CIRCLE_TRI, "src/components/textures/planets/Planet2.png", "Planet2");
-        planetTwo.SetPosition(camX - planetSelect.width/2, -camY/2, 1);
-        this.add( planetTwo );
+        this.planetTwo = new PlanetButton("Planet2", "Planet2Button");
+        this.planetTwo.SetPosition(camX - planetSelect.width/2, -camY/2, 1);
+        this.add( this.planetTwo );
 
-        const planetThree = new CircleButton(CIRCLE_RADIUS, CIRCLE_TRI, "src/components/textures/planets/Planet3.png", "Planet3");
-        planetThree.SetPosition(camX - planetSelect.width/2, -camY/2 - planetSelect.length* 3/10, 1);
-        this.add( planetThree );
+        this.planetThree = new PlanetButton("Planet3", "Planet3Button");
+        this.planetThree.SetPosition(camX - planetSelect.width/2, -camY/2 - planetSelect.length* 3/10, 1);
+        this.add( this.planetThree );
+    }
+
+    update(timestamp, currentPlanet) {
+
+        if (currentPlanet == 1) {
+            this.planetOne.rotation.y += 0.01;
+
+        } else if (currentPlanet == 2) {
+            this.planetTwo.rotation.y += 0.01;
+
+        } else if (currentPlanet == 3) {
+            this.planetThree.rotation.y += 0.01;
+
+        }
+
     }
 
 }

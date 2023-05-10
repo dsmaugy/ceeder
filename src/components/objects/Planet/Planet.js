@@ -4,7 +4,7 @@ import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 
 class Planet extends Group {
-    constructor(objName) {
+    constructor(objName, size, overridenPlanetName) {
         // Call parent Group() constructor
         super();
 
@@ -15,6 +15,8 @@ class Planet extends Group {
         this.objLoader.setPath('src/components/SpacePack/OBJ/');
         this.name = objName;
         this.model = null;
+        this.size = size;
+        this.overridenPlanetName = overridenPlanetName;
 
         this.mtlLoader.load(objName + '.mtl', (mtl) => {
             this.objLoader.setMaterials(mtl);
@@ -35,11 +37,20 @@ class Planet extends Group {
                 this.model.scale.multiplyScalar(2);
             }
 
+            if (this.size) {
+                this.model.scale.multiplyScalar(this.size);
+            }
+
+            if (this.overridenPlanetName) {
+                this.model.name = this.overridenPlanetName;
+            }
+
             const texture = new TextureLoader().load("src/components/textures/planets/" + name + ".png");
             const planetMat = new MeshPhongMaterial({map: texture});
             this.model.material = planetMat;
         }); 
     }
+
 }
 
 export default Planet;

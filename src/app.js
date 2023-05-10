@@ -73,13 +73,7 @@ controls.minDistance = 4;
 controls.maxDistance = 16;
 controls.update();
 
-
-// const controls2 = new TrackballControls(uiCamera, canvas);
-// controls2.enableDamping = true;
-// controls2.enablePan = false;
-// controls2.minDistance = 4;
-// controls2.maxDistance = 16;
-// controls2.update();
+var currentPlanet = 1;
 
 // set up audio
 const audioManager = new AudioManager();
@@ -115,6 +109,7 @@ const onAnimationFrameHandler = (timeStamp) => {
     renderer.render(scene, camera);
     renderer.render(uiScene, uiCamera);
     scene.update && scene.update(timeStamp);
+    uiScene.update(timeStamp, currentPlanet);
     // scene.update(timeStamp);
     window.requestAnimationFrame(onAnimationFrameHandler);
 };
@@ -212,6 +207,14 @@ const onClickHandler = (event) => {
         ) {
             console.log(clickedObject.name);
             scene.changePlanet(clickedObject.name);
+
+            if (clickedObject.name == "Planet1") {
+                currentPlanet = 1;
+            } else if (clickedObject.name == "Planet2") {
+                currentPlanet = 2;
+            } else if (clickedObject.name == "Planet3") {
+                currentPlanet = 3;
+            }
         }
     }
 
