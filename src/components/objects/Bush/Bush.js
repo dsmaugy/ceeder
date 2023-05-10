@@ -93,6 +93,11 @@ class Bush extends THREE.Group {
     }
 
     animatedGrow() {
+        this.currComplexity--;
+        if (this.currComplexity == 0) {
+            return;
+        }
+
         const newSegments = [];
         this.segments.forEach((parentSegment) => {
             // get parameters for each parent

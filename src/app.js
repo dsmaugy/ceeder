@@ -87,27 +87,14 @@ function updatePointer(event) {
     pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 }
 
-function addFlower() {
+function addBush(intersect) {
     raycaster.setFromCamera(pointer, camera);
-
-    // TODO: make this so you can't add flowers with a mouse click through other flowers / objects
-    const intersects = raycaster.intersectObject(scene.getPlanet().model);
-    if (intersects.length === 1) {
-        scene.plantFlower(intersects[0].point, intersects[0].face);
-        console.log(intersects);
-        // if (intersects[0]) {
-        // scene.plantFlower(intersects[0].point, intersects[0].face);
-        // scene.add(new ArrowHelper(intersects[0].face.normal, intersects[0].point, 2, "red"));
-    }
+    scene.plantBush(intersect.point, intersect.face);
 }
 
-function addBush() {
+function growBush(bush) {
     raycaster.setFromCamera(pointer, camera);
-
-    const intersects = raycaster.intersectObject(scene.getPlanet().model);
-    if (intersects.length === 1) {
-        scene.plantBush(intersects[0].point, intersects[0].face);
-    }
+    scene.growBush(bush);
 }
 
 // Render loop
@@ -146,7 +133,6 @@ windowResizeHandler();
 window.addEventListener('resize', windowResizeHandler, false);
 
 window.addEventListener('pointermove', updatePointer);
-window.addEventListener('mouseup', addBush);
 
 // Click Handler
 const onClickHandler = (event) => {
@@ -171,19 +157,43 @@ const onClickHandler = (event) => {
     raycaster.layers.enableAll();
     raycaster.setFromCamera(mouseNDC, uiCamera);
 
-    addBush();
-
     // console.log("clicked on screen coords: (" + mouseX + ", " + mouseY + ")" );
     // console.log("clicked on world coords: (" + worldCoords.x + ", " + worldCoords.y + ", " + worldCoords.z + ")" );
 
-    const intersects = raycaster.intersectObjects(uiScene.children, true);
+    const intersects = [];
+    let clickedBush;
+
+    raycaster.intersectObjects(uiScene.children, true).forEach((intersect) => {
+        intersects.push(intersect);
+    });
+
+    raycaster.setFromCamera(pointer, camera);
+    scene.getPlanet().children.forEach((obj) => {
+        if (obj.name === 'bush') {
+            raycaster.intersectObject(obj, true).forEach((intersect) => {
+                intersects.push(intersect);
+                clickedBush = obj;
+            });
+        }
+    });
+    raycaster.intersectObject(scene.getPlanet().model).forEach((intersect) => {
+        intersects.push(intersect);
+    });
     // console.log(uiScene.children);
     // console.log(intersects);
     if (intersects.length > 0) {
         const clickedObject = intersects[0].object;
+        console.log(clickedObject.name);
 
         // console.log(clickedObject.getObjectByName);
-        console.log(clickedObject.name);
+        if (clickedObject.name == 'Icosphere') {
+            addBush(intersects[0]);
+        } else if (
+            clickedObject.name === 'leaves' ||
+            clickedObject.name === 'branch'
+        ) {
+            growBush(clickedBush);
+        }
     }
 };
 window.addEventListener('click', onClickHandler);

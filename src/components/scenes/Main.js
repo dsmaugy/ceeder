@@ -75,12 +75,13 @@ class MainScene extends Scene {
     plantBush(pos, face) {
         const bush = new Bush(this.planet);
         bush.init();
-        bush.animatedGrow();
-        bush.animatedGrow();
-        bush.animatedGrow();
         bush.position.copy(pos);
         bush.quaternion.setFromUnitVectors(UP_VECTOR, face.normal);
         this.planet.add(bush);
+    }
+
+    growBush(bush) {
+        bush.animatedGrow();
     }
 
     getPlanet() {
@@ -89,6 +90,7 @@ class MainScene extends Scene {
 
     update(timestamp) {
         // updates 60 times a second
+
         this.asteroids.update(timestamp);
         this.lights.update(timestamp);
     }
