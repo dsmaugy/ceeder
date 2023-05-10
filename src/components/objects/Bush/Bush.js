@@ -1,4 +1,10 @@
 import * as THREE from 'three';
+import {
+    getLeafMat,
+    getLeafGeometry,
+    getBranchMat,
+    getBranchGeometry,
+} from './bushUtils';
 
 class Branch extends THREE.Mesh {
     constructor(props) {
@@ -6,19 +12,11 @@ class Branch extends THREE.Mesh {
         this.name = 'branch';
         this.currComplexity = 0;
 
-        const { r1, r2 } = props;
-        this.length = 0.7;
+        const { r1, r2, planet } = props;
+        this.length = planet === 'Planet3' ? 0.5 : 0.7;
 
-        this.geometry = new THREE.CylinderGeometry(r1, r2, this.length, 8);
-        this.material = new THREE.MeshPhongMaterial({
-            color: new THREE.Color('rgb(71, 43, 37)'),
-            emissive: new THREE.Color('rgb(148, 66, 61)'),
-            specular: new THREE.Color('rgb(237, 105, 97)'),
-            shininess: 10,
-            transparent: 1,
-            flatShading: true,
-            opacity: 1,
-        });
+        this.geometry = getBranchGeometry(planet, r1, r2, this.length);
+        this.material = getBranchMat(planet);
     }
 }
 
@@ -30,30 +28,25 @@ class Leaves extends THREE.Mesh {
         const size = props && props.size !== undefined ? props.size : 0.1;
         const complexity =
             props && props.complexity !== undefined ? props.complexity : 1;
+        const planet =
+            props && props.planet !== undefined ? props.planet : 'Planet1';
 
-        this.scale.multiplyScalar((size * complexity) / 2);
-        this.scale.y = Math.random() * 0.5 + 0.2;
+        this.scale.multiplyScalar((size * (complexity + 1)) / 3);
+
+        if (planet === 'Planet1') this.scale.y = Math.random() * 0.5 + 0.2;
         this.rotation.z = (Math.random() - 1) / 2;
         this.rotation.x = (Math.random() - 1) / 5;
 
         this.name = 'leaves';
-        this.geometry = new THREE.IcosahedronGeometry(size, 0);
-        this.material = new THREE.MeshPhongMaterial({
-            color: new THREE.Color('rgb(226,35,213)'),
-            emissive: new THREE.Color('rgb(255,128,64)'),
-            specular: new THREE.Color('rgb(255,155,255)'),
-            shininess: 10,
-            transparent: 1,
-            flatShading: true,
-            opacity: 1,
-        });
+        this.geometry = getLeafGeometry(planet);
+        this.material = getLeafMat(planet);
     }
 }
 
 class Bush extends THREE.Group {
     constructor(parent) {
         super();
-        this.maxComplexity = 4;
+        this.maxComplexity = 3;
         this.name = 'bush';
         this.segments = [];
 
@@ -63,10 +56,10 @@ class Bush extends THREE.Group {
         this.add(bush);
     }
 
-    init() {
+    init(planet) {
         // add new segment leaf group to current tree
         const group = new THREE.Group();
-        const segment = new Branch({ r1: 2 / 40, r2: 4 / 40 });
+        const segment = new Branch({ r1: 2 / 40, r2: 4 / 40, planet: planet });
 
         segment.currComplexity = this.maxComplexity;
         this.segments.push(segment);
@@ -83,16 +76,25 @@ class Bush extends THREE.Group {
 
         dir.multiplyScalar(segment.length);
 
-        const leaves = new Leaves({
-            size: 0.5,
-            complexity: segment.currComplexity,
-        });
-        leaves.position.copy(segment.position);
-        leaves.position.y += segment.length / 2;
-        group.add(leaves);
+        // apply rotation
+        switch (planet) {
+            case 'Planet3':
+            case 'Planet1':
+                const leaves = new Leaves({
+                    size: 0.5,
+                    complexity: segment.currComplexity,
+                    planet: planet,
+                });
+                leaves.position.copy(segment.position);
+                leaves.position.y += segment.length / 2;
+                group.add(leaves);
+                break;
+            case 'Planet2':
+                break;
+        }
     }
 
-    animatedGrow() {
+    animatedGrow(planet) {
         this.currComplexity--;
         if (this.currComplexity == 0) {
             return;
@@ -105,34 +107,41 @@ class Bush extends THREE.Group {
                 parentSegment.dir,
                 parentSegment.position
             );
+            position.y -= parentSegment.length / 4;
 
             const numChildrenBranches = Math.floor(
                 Math.random() * parentSegment.currComplexity * 2
             );
+
+            const group = new THREE.Group();
+            this.add(group);
 
             // if parent has no child branches
             for (let i = 0; i < numChildrenBranches; i++) {
                 const newComplexity = parentSegment.currComplexity - 1;
 
                 // get the parent rotation
-                const rz = (Math.random() * Math.PI) / 2;
+                const rz =
+                    planet !== 'Planet2'
+                        ? (Math.random() * Math.PI) / 2
+                        : Math.random() * Math.PI + Math.PI;
                 const ry =
                     parentSegment.ry +
                     ((Math.PI * 2) / numChildrenBranches) * i +
                     (Math.random() * Math.PI) / 6 -
                     Math.PI / 3;
 
-                const group = new THREE.Group();
-                this.add(group);
-
                 // create child segment
                 const segment = new Branch({
                     r1: 2 / 50 / Math.log(newComplexity),
                     r2: 4 / 50 / Math.log(newComplexity),
+                    planet: planet,
                 });
                 segment.position.y += segment.length / 2;
                 group.position.copy(position);
                 group.add(segment);
+
+                console.log(segment);
 
                 // get new direction and update child segment with new direction
                 const dir = this.up;
@@ -141,6 +150,7 @@ class Bush extends THREE.Group {
                 group.rotation.y = ry;
                 dir.applyAxisAngle(new THREE.Vector3(0, 1, 0), ry);
                 dir.multiplyScalar(segment.length);
+                if (planet === 'Planet2') dir.addScalar(segment.length / 2);
                 segment.dir = dir;
                 segment.ry = ry;
                 segment.rz = rz;
@@ -149,9 +159,11 @@ class Bush extends THREE.Group {
                 segment.currComplexity = newComplexity;
                 newSegments.push(segment);
 
+                // conditionally add leaves
                 const leaves = new Leaves({
                     size: 0.5,
                     complexity: newComplexity,
+                    planet: planet,
                 });
                 leaves.position.copy(segment.position);
                 leaves.position.y += segment.length / 2;
