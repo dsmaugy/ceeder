@@ -18,7 +18,7 @@ import {
     MeshNormalMaterial,
     MeshLambertMaterial,
 } from 'three';
-import { Flower, Land, Bush } from 'objects';
+import { Land, Bush } from 'objects';
 import { BasicLights } from 'lights';
 import { SphereGeometry, MeshToonMaterial, Mesh, Euler } from 'three';
 import Planet from '../objects/Planet/Planet';
@@ -62,14 +62,6 @@ class MainScene extends Scene {
         this.asteroids = new AsteroidManager(100, 200);
 
         this.add(this.lights, this.planet, this.asteroids);
-    }
-
-    plantFlower(pos, face) {
-        const flower = new Flower(this.planet);
-        flower.position.copy(pos);
-        // inspired from https://stackoverflow.com/questions/9038465/three-js-object3d-cylinder-rotation-to-align-to-a-vector
-        flower.quaternion.setFromUnitVectors(UP_VECTOR, face.normal);
-        this.planet.add(flower);
     }
 
     plantBush(pos, face) {
