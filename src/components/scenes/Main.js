@@ -25,7 +25,7 @@ import Planet from '../objects/Planet/Planet';
 import AsteroidManager from './AsteroidManager';
 
 const UP_VECTOR = new Vector3(0, 1, 0);
-const SECONDS_PER_DAY = 5;
+const SECONDS_PER_DAY = 60;
 const SPHERE_RADIUS = 200;
 
 class MainScene extends Scene {
@@ -39,7 +39,7 @@ class MainScene extends Scene {
         const nebulaTexture = new TextureLoader().load(
             'src/components/textures/nebula.png'
         );
-        const backgroundSphere = new SphereGeometry(SPHERE_RADIUS, 40, 20);
+        const backgroundSphere = new SphereGeometry(SPHERE_RADIUS, 50, 20);
         const backgroundMat = new MeshToonMaterial({ map: nebulaTexture }); // toon material causes the weird shading
         const dayMat = new MeshToonMaterial({ map: nebulaTexture });
         const nightMat = new MeshBasicMaterial({ map: nebulaTexture });
@@ -49,7 +49,7 @@ class MainScene extends Scene {
         this.add(backgroundMesh);
 
         // TODO: add slow auto rotation?
-        this.planet = new Planet('Planet2');
+        this.planet = new Planet('Planet1');
 
         // X is red, Y is green, Z is blue
         this.planet.add(new AxesHelper(5));

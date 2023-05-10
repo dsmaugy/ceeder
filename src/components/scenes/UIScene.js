@@ -2,21 +2,17 @@ import * as Dat from 'dat.gui';
 import { Scene, Color, Vector3 } from 'three';
 // import * as THREE from 'three';
 // import { Button } from 'ui';
-import { Button, RoundedButton } from 'objects';
+import { Button, RoundedButton, CircleButton } from 'objects';
 // import { Flower, Land } from 'objects';
 // import { BasicLights } from 'lights';
+
+const CIRCLE_RADIUS = 1.1;
+const CIRCLE_TRI = 32;
 
 class UIScene extends Scene {
     constructor(camX, camY) {
         // Call parent Scene() constructor
         super();
-
-        // Init state
-        this.state = {
-            gui: new Dat.GUI(), // Create GUI for scene
-            rotationSpeed: 1,
-            updateList: [],
-        };
 
         // Current Flower Display UI Elements
 
@@ -48,33 +44,25 @@ class UIScene extends Scene {
         flowerThree.SetPosition(flowerSelect.position.x + flowerSelect.width*.3, -camY + flowerSelect.length/2, 1);
         this.add( flowerThree );
 
-        // const flowerFour = new RoundedButton(fbuttonlen, fbuttonlen, 1, 0x00ffff, "flowerFour");
-        // flowerFour.SetPosition(flowerSelect.position.x + (flowerSelect.width*.35), -camY + flowerSelect.length/2, 1);
-        // this.add( flowerFour );
 
         // Planet selection UI Elements
-
         const planetSelect = new RoundedButton(camX*.2, camY, 1, 0xc072d4, "planetSelect");
         planetSelect.SetPosition(camX - planetSelect.width/2, -camY/2, 0);
         this.add( planetSelect );
 
         let pbuttonlen = planetSelect.width*.75;
-
-        const planetOne = new RoundedButton(pbuttonlen, pbuttonlen, 1, 0xff0000, "Planet1");
+        
+        const planetOne = new CircleButton(CIRCLE_RADIUS, CIRCLE_TRI, "src/components/textures/planets/Planet1.png", "Planet1");
         planetOne.SetPosition(camX - planetSelect.width/2, -camY/2 + planetSelect.length* 3/10, 1);
         this.add( planetOne );
 
-        const planetTwo = new RoundedButton(pbuttonlen, pbuttonlen, 1, 0x00ff00, "Planet2");
+        const planetTwo = new CircleButton(CIRCLE_RADIUS, CIRCLE_TRI, "src/components/textures/planets/Planet2.png", "Planet2");
         planetTwo.SetPosition(camX - planetSelect.width/2, -camY/2, 1);
         this.add( planetTwo );
 
-        const planetThree = new RoundedButton(pbuttonlen, pbuttonlen, 1, 0x0000ff, "Planet3");
+        const planetThree = new CircleButton(CIRCLE_RADIUS, CIRCLE_TRI, "src/components/textures/planets/Planet3.png", "Planet3");
         planetThree.SetPosition(camX - planetSelect.width/2, -camY/2 - planetSelect.length* 3/10, 1);
         this.add( planetThree );
-    }
-
-    addToUpdateList(object) {
-        this.state.updateList.push(object);
     }
 
 }
