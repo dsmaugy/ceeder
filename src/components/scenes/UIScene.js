@@ -69,13 +69,13 @@ class UIScene extends Scene {
     update(timestamp, currentPlanet) {
 
         if (currentPlanet == 1) {
-            this.planetOne.rotation.y += 0.01;
+            this.planetOne.miniPlanet.rotation.y += 0.01;
 
         } else if (currentPlanet == 2) {
-            this.planetTwo.rotation.y += 0.01;
+            this.planetTwo.miniPlanet.rotation.y += 0.01;
 
         } else if (currentPlanet == 3) {
-            this.planetThree.rotation.y += 0.01;
+            this.planetThree.miniPlanet.rotation.y += 0.01;
 
         }
 

@@ -6,12 +6,12 @@ class PlanetButton extends Group {
         // Call parent Group() constructor
         super();
 
-        const miniPlanet = new Planet(planetName, 0.25, planetName);
-        miniPlanet.name = name;
-        this.add(miniPlanet);
+        this.miniPlanet = new Planet(planetName, 0.25, planetName);
+        this.miniPlanet.name = name;
+        this.add(this.miniPlanet);
         const planetLight = new DirectionalLight("white", 0.65);
         
-        planetLight.translateX(0.5);
+        planetLight.translateX(100);
         this.add(planetLight);
     }
 
