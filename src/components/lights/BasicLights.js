@@ -6,12 +6,12 @@ class BasicLights extends Group {
     constructor(bg, dayMat, nightMat, ...args) {
         // Invoke parent Group() constructor with our args
         super(...args);
-        this.ambi = new AmbientLight(0x404040, 2.32);
+        this.ambi = new AmbientLight(0x404040, 1);
 
         this.dayMat = dayMat;
         this.nightMat = nightMat;
         this.backgroundMesh = bg;
-        this.sunlight = new DirectionalLight(0xedcc72, 0.75);
+        this.sunlight = new DirectionalLight(0xedcc72, 0.8);
         this.daytime = true;
 
         this.add(this.ambi, this.sunlight);
