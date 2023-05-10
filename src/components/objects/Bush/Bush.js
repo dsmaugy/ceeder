@@ -13,7 +13,7 @@ class Branch extends THREE.Mesh {
         this.currComplexity = 0;
 
         const { r1, r2, planet } = props;
-        this.length = 0.7;
+        this.length = planet === 'Planet3' ? 0.5 : 0.7;
 
         this.geometry = getBranchGeometry(planet, r1, r2, this.length);
         this.material = getBranchMat(planet);
@@ -78,6 +78,7 @@ class Bush extends THREE.Group {
 
         // apply rotation
         switch (planet) {
+            case 'Planet3':
             case 'Planet1':
                 const leaves = new Leaves({
                     size: 0.5,
@@ -112,13 +113,16 @@ class Bush extends THREE.Group {
                 Math.random() * parentSegment.currComplexity * 2
             );
 
+            const group = new THREE.Group();
+            this.add(group);
+
             // if parent has no child branches
             for (let i = 0; i < numChildrenBranches; i++) {
                 const newComplexity = parentSegment.currComplexity - 1;
 
                 // get the parent rotation
                 const rz =
-                    planet === 'Planet1'
+                    planet !== 'Planet2'
                         ? (Math.random() * Math.PI) / 2
                         : Math.random() * Math.PI + Math.PI;
                 const ry =
@@ -126,9 +130,6 @@ class Bush extends THREE.Group {
                     ((Math.PI * 2) / numChildrenBranches) * i +
                     (Math.random() * Math.PI) / 6 -
                     Math.PI / 3;
-
-                const group = new THREE.Group();
-                this.add(group);
 
                 // create child segment
                 const segment = new Branch({
@@ -139,6 +140,8 @@ class Bush extends THREE.Group {
                 segment.position.y += segment.length / 2;
                 group.position.copy(position);
                 group.add(segment);
+
+                console.log(segment);
 
                 // get new direction and update child segment with new direction
                 const dir = this.up;
