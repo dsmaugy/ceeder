@@ -83,7 +83,7 @@ const getLeafGeometry = (classification) => {
         case 'Planet2':
             return new THREE.SphereGeometry(Math.random() * 0.2 + 0.2, 15, 15);
         case 'Planet3':
-            return new THREE.TetrahedronGeometry((Math.random() + 0.75) * 0.75);
+            return new THREE.TetrahedronGeometry((Math.random() + 0.6) * 0.6);
         default:
             return undefined;
     }
