@@ -1,9 +1,9 @@
 {
-  "name": "lower-case-dashed-name-of-project",
-  "repository": "REPOSITORY-NAME-AS-IT-APPEARS-IN-GITHUB-URL",
+  "name": "ceeder",
+  "repository": "https://github.com/dsmaugy/cpsc478-final",
   "version": "0.1.0",
-  "title": "PROJECT TITLE HERE",
-  "description": "SHORT DESCRIPTION OF PROJECT HERE. ONE TO TWO SENTENCES MAX",
+  "title": "CEEDER",
+  "description": "lose yourself in a peaceful solar system far away from the scourge of human industrialization",
   "keywords": [
     "graphics",
     "three.js",

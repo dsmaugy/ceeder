@@ -11,7 +11,7 @@ class BasicLights extends Group {
         this.dayMat = dayMat;
         this.nightMat = nightMat;
         this.backgroundMesh = bg;
-        this.sunlight = new DirectionalLight(0xedcc72, 0.5);
+        this.sunlight = new DirectionalLight(0xedcc72, 0.75);
         this.daytime = true;
 
         this.add(this.ambi, this.sunlight);

@@ -1,5 +1,4 @@
-import { Group, MeshBasicMaterial, MeshPhongMaterial, MeshToonMaterial, RepeatWrapping, TextureLoader } from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { Group, MeshPhongMaterial, TextureLoader } from 'three';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 

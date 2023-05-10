@@ -183,11 +183,13 @@ const onClickHandler = (event) => {
         // Planet element/models
         if (clickedObject.name == 'Icosphere') {
             addBush(intersects[0]);
+            audioManager.playRandomChime();
         } else if (
             clickedObject.name === 'leaves' ||
             clickedObject.name === 'branch'
         ) {
             growBush(clickedBush);
+            audioManager.playRandomChime();
         }
 
         // UI elements/button selection
@@ -200,10 +202,13 @@ const onClickHandler = (event) => {
 
             if (clickedObject.name == "Planet1") {
                 currentPlanet = 1;
+                audioManager.playPlanetChime(1);
             } else if (clickedObject.name == "Planet2") {
                 currentPlanet = 2;
+                audioManager.playPlanetChime(2);
             } else if (clickedObject.name == "Planet3") {
                 currentPlanet = 3;
+                audioManager.playPlanetChime(3);
             }
         }
 

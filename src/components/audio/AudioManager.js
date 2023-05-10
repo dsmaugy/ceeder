@@ -1,4 +1,5 @@
 import { Audio, AudioListener, AudioLoader } from "three";
+import { getRandomNumber } from "../../util";
 
 
 class AudioManager extends AudioListener {
@@ -29,6 +30,15 @@ class AudioManager extends AudioListener {
             soundEffect.setVolume(volume);
             soundEffect.play();
         });
+    }
+
+    playRandomChime() {
+        const r = Math.floor(getRandomNumber(1, 6));
+        this.playSoundEffect("chime_" + r + ".wav");
+    }
+
+    playPlanetChime(num) {
+        this.playSoundEffect("planet_chime_" + num + ".wav");
     }
 
 }
