@@ -60,15 +60,15 @@ class UIScene extends Scene {
 
         let pbuttonlen = planetSelect.width*.75;
 
-        const planetOne = new RoundedButton(pbuttonlen, pbuttonlen, 1, 0xff0000, "planetOne");
+        const planetOne = new RoundedButton(pbuttonlen, pbuttonlen, 1, 0xff0000, "Planet1");
         planetOne.SetPosition(camX - planetSelect.width/2, -camY/2 + planetSelect.length* 3/10, 1);
         this.add( planetOne );
 
-        const planetTwo = new RoundedButton(pbuttonlen, pbuttonlen, 1, 0x00ff00, "planetTwo");
+        const planetTwo = new RoundedButton(pbuttonlen, pbuttonlen, 1, 0x00ff00, "Planet2");
         planetTwo.SetPosition(camX - planetSelect.width/2, -camY/2, 1);
         this.add( planetTwo );
 
-        const planetThree = new RoundedButton(pbuttonlen, pbuttonlen, 1, 0x0000ff, "planetThree");
+        const planetThree = new RoundedButton(pbuttonlen, pbuttonlen, 1, 0x0000ff, "Planet3");
         planetThree.SetPosition(camX - planetSelect.width/2, -camY/2 - planetSelect.length* 3/10, 1);
         this.add( planetThree );
     }
