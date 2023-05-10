@@ -86,6 +86,10 @@ class MainScene extends Scene {
         return this.planet;
     }
 
+    changeSunlightColor(newColor) {
+        this.lights.changeLightColor(newColor);
+    }
+
     update(timestamp) {
         // updates 60 times a second
 
