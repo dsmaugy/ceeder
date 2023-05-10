@@ -1,8 +1,8 @@
-import { DepthFormat, Group, Vector3 } from "three";
+import { Group } from "three";
 import { getRandomNumber } from "../../util";
 import Asteroid from "../objects/Asteroid/Asteroid";
 
-const SPAWN_RATE = 0.1;
+const SPAWN_RATE = 0.15;
 const DESPAWN_BOUNDARY = 200;
 
 class AsteroidManager extends Group {
@@ -11,7 +11,7 @@ class AsteroidManager extends Group {
 
         this.minR = minRadius;
         this.maxR = maxRadius;
-        this.asteroids = []
+        this.asteroids = [];
 
         this.spawnAsteroidAt(0, 10, 10);
         this.spawnAsteroidAt(-10, 5, 0);
@@ -34,24 +34,15 @@ class AsteroidManager extends Group {
 
 
     spawnRandomAsteroid() {
+        const u = getRandomNumber(0, 1);
+        const v = getRandomNumber(0, 1);
+        const theta = 2*Math.PI*u;
+        const phi = Math.acos(2*v-1);
+        const p = getRandomNumber(this.minR, this.maxR);
 
-
-
-        let u = getRandomNumber(0, 1);
-        let v = getRandomNumber(0, 1);
-        console.log(u);
-        console.log(v);
-        let theta = 2*Math.PI*u;
-        let phi = Math.acos(2*v-1);
-        let p = getRandomNumber(this.minR, this.maxR);
-
-        let posX = p*Math.sin(phi)*Math.cos(theta);
-        let posY = p*Math.sin(phi)*Math.cos(theta);
-        let posZ = p*Math.cos(phi);
-
-        console.log(posX);
-        console.log(posY);
-        console.log(posZ);
+        const posX = p*Math.sin(phi)*Math.cos(theta);
+        const posY = p*Math.sin(phi)*Math.cos(theta);
+        const posZ = p*Math.cos(phi);
 
         this.spawnAsteroidAt(posX, posY, posZ);
 
@@ -59,8 +50,8 @@ class AsteroidManager extends Group {
 
     update(timestamp) {
         // periodically spawn more asteroids
-        let sec = Math.round(timestamp / 1000);
-        if (sec % 5 === 0 && this.lastSpawnCheck != sec) {
+        const sec = Math.round(timestamp / 1000);
+        if (sec % 5 === 0 && this.lastSpawnCheck !== sec) {
             if (Math.random() < SPAWN_RATE) {
                 this.spawnRandomAsteroid();
             }
@@ -68,10 +59,8 @@ class AsteroidManager extends Group {
             // this.lastSpawnCheck = sec;
         }
 
-
-
         // animate already spawned asteroids
-        let removals = []
+        const removals = [];
         this.asteroids.forEach((asteroid, i) => {
             // WARN: do NOT make this a quaternion... worst mistake of my life!!!!
             asteroid.rotation.x += asteroid.rotX;
@@ -89,14 +78,9 @@ class AsteroidManager extends Group {
         });
 
         removals.forEach((idx) => {
-            // console.log("deleting " + idx);
             this.remove(this.asteroids[idx]);
             this.asteroids.splice(idx, 1);
-
-            // console.log(this.asteroids);
-        })
-
-    
+        });
     }
 }
 

@@ -1,26 +1,14 @@
-import * as Dat from 'dat.gui';
-import * as THREE from 'three';
 import {
     Scene,
-    Color,
-    ArrowHelper,
     Vector3,
     AxesHelper,
     TextureLoader,
-    RepeatWrapping,
-    ClampToEdgeWrapping,
-    MirroredRepeatWrapping,
-    CubeTextureLoader,
     Fog,
     MeshBasicMaterial,
-    FogExp2,
-    MeshDistanceMaterial,
-    MeshNormalMaterial,
-    MeshLambertMaterial,
 } from 'three';
-import { Land, Bush } from 'objects';
+import { Bush } from 'objects';
 import { BasicLights } from 'lights';
-import { SphereGeometry, MeshToonMaterial, Mesh, Euler } from 'three';
+import { SphereGeometry, MeshToonMaterial, Mesh } from 'three';
 import Planet from '../objects/Planet/Planet';
 import AsteroidManager from './AsteroidManager';
 
@@ -51,14 +39,8 @@ class MainScene extends Scene {
         // TODO: add slow auto rotation?
         this.planet = new Planet('Planet1');
 
-        // X is red, Y is green, Z is blue
-        this.planet.add(new AxesHelper(5));
-
         this.lights = new BasicLights(backgroundMesh, dayMat, nightMat);
 
-        // ASTEROID TESTING
-        // this.asteroid = new Asteroid("Asteroid1");
-        // this.add(this.asteroid);
         this.asteroids = new AsteroidManager(100, 200);
 
         this.add(this.lights, this.planet, this.asteroids);

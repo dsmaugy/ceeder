@@ -50,12 +50,8 @@ uiCamera.aspect = aspect;
 
 // Scene setup
 const uiScene = new UIScene(uiCamera.right, uiCamera.top);
-
-// var RoundedBoxGeometry = require('three-rounded-box')(THREE); //pass your instance of three
-// var myBox = new THREE.Mesh( new RoundedBoxGeometry( 10 , 10 , 10 , 2 , 5 ) );
-// scene.add(myBox);
-
-
+// set up camera planet UI
+let currentPlanet = 1;
 
 // Set up renderer, canvas, and minor CSS adjustments
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -67,13 +63,11 @@ document.body.appendChild(canvas);
 
 // Set up controls
 const controls = new TrackballControls(camera, canvas);
-controls.enableDamping = true;
-controls.enablePan = false;
+controls.noPan = true;
 controls.minDistance = 4;
 controls.maxDistance = 16;
 controls.update();
 
-var currentPlanet = 1;
 
 // set up audio
 const audioManager = new AudioManager();
@@ -86,7 +80,6 @@ const pointer = new Vector2();
 function updatePointer(event) {
     // calculate pointer position in normalized device coordinates
     // (-1 to +1) for both components
-
     pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
     pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
 }
@@ -104,13 +97,10 @@ function growBush(bush) {
 // Render loop
 const onAnimationFrameHandler = (timeStamp) => {
     controls.update();
-    // controls2.update();
-
     renderer.render(scene, camera);
     renderer.render(uiScene, uiCamera);
-    scene.update && scene.update(timeStamp);
+    scene.update(timeStamp);
     uiScene.update(timeStamp, currentPlanet);
-    // scene.update(timeStamp);
     window.requestAnimationFrame(onAnimationFrameHandler);
 };
 window.requestAnimationFrame(onAnimationFrameHandler);

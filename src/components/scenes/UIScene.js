@@ -1,13 +1,7 @@
-import * as Dat from 'dat.gui';
-import { Scene, Color, Vector3 } from 'three';
-// import * as THREE from 'three';
-// import { Button } from 'ui';
-import { Button, RoundedButton, PlanetButton } from 'objects';
-// import { Flower, Land } from 'objects';
-// import { BasicLights } from 'lights';
+import { Scene } from 'three';
+import { RoundedButton, PlanetButton } from 'objects';
 
-const CIRCLE_RADIUS = 1.1;
-const CIRCLE_TRI = 32;
+
 
 class UIScene extends Scene {
     constructor(camX, camY) {

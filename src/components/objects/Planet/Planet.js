@@ -28,7 +28,6 @@ class Planet extends Group {
         this.objLoader.load(name + ".obj", (obj) => {
             this.add(obj);
             obj.name = 'internal_planet_group';
-            console.log(obj);
             this.model = obj.children[0];
 
             if (name === "Planet2") {

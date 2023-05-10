@@ -1,4 +1,4 @@
-import { Group, SpotLight, AmbientLight, HemisphereLight, HemisphereLightHelper, DirectionalLight } from 'three';
+import { Group, AmbientLight, DirectionalLight } from 'three';
 import { SECONDS_PER_DAY } from '../scenes/Main';
 
 
