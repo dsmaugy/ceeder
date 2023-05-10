@@ -11,7 +11,8 @@ class PlanetButton extends Group {
         this.add(this.miniPlanet);
         const planetLight = new DirectionalLight("white", 0.65);
         
-        planetLight.translateX(100);
+        planetLight.translateZ(10);
+        planetLight.translateY(-5);
         this.add(planetLight);
     }
 
