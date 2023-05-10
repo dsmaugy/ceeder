@@ -18,14 +18,14 @@ import {
     MeshNormalMaterial,
     MeshLambertMaterial,
 } from 'three';
-import { Flower, Land, Bush } from 'objects';
+import { Land, Bush } from 'objects';
 import { BasicLights } from 'lights';
 import { SphereGeometry, MeshToonMaterial, Mesh, Euler } from 'three';
 import Planet from '../objects/Planet/Planet';
 import AsteroidManager from './AsteroidManager';
 
 const UP_VECTOR = new Vector3(0, 1, 0);
-const SECONDS_PER_DAY = 5;
+const SECONDS_PER_DAY = 60;
 const SPHERE_RADIUS = 200;
 
 class MainScene extends Scene {
@@ -39,7 +39,7 @@ class MainScene extends Scene {
         const nebulaTexture = new TextureLoader().load(
             'src/components/textures/nebula.png'
         );
-        const backgroundSphere = new SphereGeometry(SPHERE_RADIUS, 40, 20);
+        const backgroundSphere = new SphereGeometry(SPHERE_RADIUS, 50, 20);
         const backgroundMat = new MeshToonMaterial({ map: nebulaTexture }); // toon material causes the weird shading
         const dayMat = new MeshToonMaterial({ map: nebulaTexture });
         const nightMat = new MeshBasicMaterial({ map: nebulaTexture });
@@ -70,24 +70,16 @@ class MainScene extends Scene {
         this.add(this.planet);
     }
 
-    plantFlower(pos, face) {
-        const flower = new Flower(this.planet);
-        flower.position.copy(pos);
-        // inspired from https://stackoverflow.com/questions/9038465/three-js-object3d-cylinder-rotation-to-align-to-a-vector
-        flower.quaternion.setFromUnitVectors(UP_VECTOR, face.normal);
-        this.planet.add(flower);
-    }
-
     plantBush(pos, face) {
         const bush = new Bush(this.planet);
-        bush.init();
+        bush.init('Planet3');
         bush.position.copy(pos);
         bush.quaternion.setFromUnitVectors(UP_VECTOR, face.normal);
         this.planet.add(bush);
     }
 
     growBush(bush) {
-        bush.animatedGrow();
+        bush.animatedGrow('Planet3');
     }
 
     getPlanet() {

@@ -73,9 +73,17 @@ controls.minDistance = 4;
 controls.maxDistance = 16;
 controls.update();
 
+
+// const controls2 = new TrackballControls(uiCamera, canvas);
+// controls2.enableDamping = true;
+// controls2.enablePan = false;
+// controls2.minDistance = 4;
+// controls2.maxDistance = 16;
+// controls2.update();
+
 // set up audio
-// const audioManager = new AudioManager();
-// camera.add(audioManager);
+const audioManager = new AudioManager();
+camera.add(audioManager);
 
 // raycaster example from https://threejs.org/docs/#api/en/core/Raycaster
 const raycaster = new Raycaster();
@@ -102,6 +110,8 @@ function growBush(bush) {
 // Render loop
 const onAnimationFrameHandler = (timeStamp) => {
     controls.update();
+    // controls2.update();
+
     renderer.render(scene, camera);
     renderer.render(uiScene, uiCamera);
     scene.update && scene.update(timeStamp);

@@ -21,20 +21,6 @@ class BasicLights extends Group {
         const timeOfDay = timestamp/1000/SECONDS_PER_DAY;
         this.sunlight.position.setY(Math.cos(timeOfDay));
         this.sunlight.position.setZ(Math.sin(timeOfDay));
-
-        // if (timeOfDay%SECONDS_PER_DAY < SECONDS_PER_DAY/2) {
-        //     // day time
-        //     if (!this.daytime) {
-        //         this.backgroundMesh.material = this.dayMat;
-        //         this.daytime = true;
-        //     }
-        // } else {
-        //     // night time
-        //     if (this.daytime) {
-        //         this.backgroundMesh.material = this.nightMat;
-        //         this.daytime = false;
-        //     }
-        // }
     }
 }
 
