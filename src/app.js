@@ -6,16 +6,19 @@
  * handles window resizes.
  *
  */
-import { WebGLRenderer, PerspectiveCamera, Vector3, OrthographicCamera, Raycaster, Vector2 } from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { SeedScene, UIScene } from 'scenes';
+import { WebGLRenderer, PerspectiveCamera, Vector3, OrthographicCamera, Raycaster, Vector2, Mesh, ArrowHelper} from 'three';
+// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
+import AudioManager from './components/audio/AudioManager';
+import { MainScene, UIScene } from 'scenes';
 
 const { innerHeight, innerWidth } = window;
 // Initialize core ThreeJS components
+const scene = new MainScene();
 const renderer = new WebGLRenderer({ antialias: true,});
 renderer.autoClear = false;
 
-// Perspective 
+// Perspective
 const camera = new PerspectiveCamera();
 // Set up camera
 camera.position.set(6, 3, -10);
@@ -30,7 +33,7 @@ const uiCamera = new OrthographicCamera(
     orthographicSize / 2,
     -orthographicSize / 2
     );
-    
+
 // UI camera setup
 uiCamera.position.set(0, 0, orthographicSize);
 uiCamera.lookAt(new Vector3(0, 0, 0));
@@ -38,7 +41,6 @@ uiCamera.aspect = aspect;
 
 // Scene setup
 const uiScene = new UIScene(uiCamera.right, uiCamera.top);
-const scene = new SeedScene();
 
 // Set up renderer, canvas, and minor CSS adjustments
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -49,13 +51,17 @@ document.body.style.overflow = 'hidden'; // Fix scrolling
 document.body.appendChild(canvas);
 
 // Set up controls
-const controls = new OrbitControls(camera, canvas);
+const controls = new TrackballControls(camera, canvas);
 controls.enableDamping = true;
 controls.enablePan = false;
 controls.minDistance = 4;
 controls.maxDistance = 16;
 controls.update();
 
+
+// set up audio
+const audioManager = new AudioManager();
+camera.add(audioManager);
 
 
 // raycaster example from https://threejs.org/docs/#api/en/core/Raycaster
@@ -73,9 +79,14 @@ function updatePointer(event) {
 function addFlower() {
     raycaster.setFromCamera(pointer, camera);
 
-    const intersects = raycaster.intersectObject(scene.getSphere());
+    // TODO: make this so you can't add flowers with a mouse click through other flowers / objects
+    const intersects = raycaster.intersectObject(scene.getPlanet().model);
     if (intersects.length === 1) {
         scene.plantFlower(intersects[0].point, intersects[0].face);
+        console.log(intersects);
+    // if (intersects[0]) {
+        // scene.plantFlower(intersects[0].point, intersects[0].face);
+        // scene.add(new ArrowHelper(intersects[0].face.normal, intersects[0].point, 2, "red"));
     }
 }
 
@@ -85,6 +96,7 @@ const onAnimationFrameHandler = (timeStamp) => {
     renderer.render(scene, camera);
     renderer.render(uiScene, uiCamera);
     scene.update && scene.update(timeStamp);
+    // scene.update(timeStamp);
     window.requestAnimationFrame(onAnimationFrameHandler);
 };
 window.requestAnimationFrame(onAnimationFrameHandler);
@@ -132,7 +144,7 @@ const onClickHandler = (event) => {
         0
     );
 
-    
+
     // Unproject: NDC -> world
     const worldCoords = new Vector3();
     worldCoords.copy(mouseNDC).unproject(uiCamera);
@@ -141,18 +153,22 @@ const onClickHandler = (event) => {
     const raycaster = new Raycaster();
     raycaster.layers.enableAll()
     raycaster.setFromCamera(mouseNDC, uiCamera);
-    
+
     // console.log("clicked on screen coords: (" + mouseX + ", " + mouseY + ")" );
     // console.log("clicked on world coords: (" + worldCoords.x + ", " + worldCoords.y + ", " + worldCoords.z + ")" );
-    
+
     const intersects = raycaster.intersectObjects(uiScene.children, true);
     // console.log(uiScene.children);
     // console.log(intersects);
     if (intersects.length > 0) {
         const clickedObject = intersects[0].object;
+
         // console.log(clickedObject.getObjectByName);
         console.log(clickedObject.name);
 
     }
-}
+};
 window.addEventListener('click', onClickHandler);
+// TODO: make this so you hvae to mousedown AND mouseup on the planet in order for the click to be registered
+// canvas.addEventListener('pointermove', updatePointer);
+// canvas.addEventListener('mouseup', addFlower);
