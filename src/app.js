@@ -216,6 +216,14 @@ const onClickHandler = (event) => {
                 currentPlanet = 3;
             }
         }
+
+        // Light buttons
+        if (clickedObject.name == 'lightOne' ||
+            clickedObject.name == 'lightTwo' || 
+            clickedObject.name == 'lightThree'
+        ) {
+            scene.changeSunlightColor(clickedObject.color);
+        }
     }
 
 };

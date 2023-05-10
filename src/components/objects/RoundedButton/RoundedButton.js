@@ -14,7 +14,7 @@ class RoundedButton extends Group {
         this.width = w;
         this.length = l;
         this.height = h;
-        // this.name = name;
+        this.color = useColor;
         
         // Create the button
         const geometry = new RoundedBoxGeometry(w, l, h, 2, 5);

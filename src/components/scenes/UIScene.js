@@ -33,17 +33,17 @@ class UIScene extends Scene {
 
         let fbuttonlen = flowerSelect.width*.25;
 
-        const flowerOne = new RoundedButton(fbuttonlen, fbuttonlen, 1, 0xff0000, "flowerOne");
-        flowerOne.SetPosition(flowerSelect.position.x - (flowerSelect.width*.3), -camY + flowerSelect.length/2, 1);
-        this.add( flowerOne );
+        const lightOne = new RoundedButton(fbuttonlen, fbuttonlen, 1, 0xff0000, "lightOne");
+        lightOne.SetPosition(flowerSelect.position.x - (flowerSelect.width*.3), -camY + flowerSelect.length/2, 1);
+        this.add( lightOne );
 
-        const flowerTwo = new RoundedButton(fbuttonlen, fbuttonlen, 1, 0x00ff00, "flowerTwo");
-        flowerTwo.SetPosition(flowerSelect.position.x - flowerSelect.width*0, -camY + flowerSelect.length/2, 1);
-        this.add( flowerTwo );
+        const lightTwo = new RoundedButton(fbuttonlen, fbuttonlen, 1, 0x00ff00, "lightTwo");
+        lightTwo.SetPosition(flowerSelect.position.x - flowerSelect.width*0, -camY + flowerSelect.length/2, 1);
+        this.add( lightTwo );
 
-        const flowerThree = new RoundedButton(fbuttonlen, fbuttonlen, 1, 0x0000ff, "flowerThree");
-        flowerThree.SetPosition(flowerSelect.position.x + flowerSelect.width*.3, -camY + flowerSelect.length/2, 1);
-        this.add( flowerThree );
+        const lightThree = new RoundedButton(fbuttonlen, fbuttonlen, 1, 0x0000ff, "lightThree");
+        lightThree.SetPosition(flowerSelect.position.x + flowerSelect.width*.3, -camY + flowerSelect.length/2, 1);
+        this.add( lightThree );
 
 
         // Planet selection UI Elements
